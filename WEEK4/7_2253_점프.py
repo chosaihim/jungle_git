@@ -22,13 +22,12 @@ def bfs(_root, _jump, _depth):
 
         if v == N-1: return depth
 
-        if v + jump - 1 < N:
-            for d_jump in dx:
-                jump_now = jump + d_jump
-                next_stone = v + jump_now
-                if jump_now > 0 and next_stone < N and not small[next_stone] and not cache[v][jump_now]:
-                    queue.append([next_stone,jump_now,depth+1])
-                    cache[v][jump_now] = 1
+        for d_jump in dx:
+            jump_now = jump + d_jump
+            next_stone = v + jump_now
+            if jump_now > 0 and next_stone < N and not small[next_stone] and not cache[v][jump_now]:
+                queue.append([next_stone,jump_now,depth+1])
+                cache[v][jump_now] = 1
 
 ## 실행
 answer = bfs(1,1,1)
