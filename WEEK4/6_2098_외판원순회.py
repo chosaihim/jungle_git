@@ -4,30 +4,22 @@ input = sys.stdin.readline
 n = int(input())    # n: number of cities
 costs = [list(map(int, input().split())) for i in range(n)]
 
-def tsp(costs):
-    # 초기변수값 설정
-    N = len(costs)              # 전체 도시 개수 = n
-    VISITED_ALL = (1<<N)-1      # 다 1로 채워서 다 방문 상태로 만들어준 값
-    cache = [[None] * (1<<N) for _ in range(N)] 
-    INF = float('inf')          # INFINITY 세팅
-
-    def find_path(last, visited):
-        if visited == VISITED_ALL:
-            return costs[last][0] or INF
-        
-        if cache[last][visited] is not None:
-            return cache[last][visited]
-
-        tmp = INF
-
-        for city in range(N):
-            if visited & (1<<city) == 0 and costs[last][city] != 0:
-                tmp = min(tmp, find_path(city, visited | (1<<city)) + costs[last][city])
-        cache[last][visited] = tmp
-        return tmp
-
-    return find_path(0, 1<<0)
+cache = [[0]*(1<<n) for _ in range(n)]
 
 
+def travel(last, visited):
+    
+    if visited == ((1<<n)-1): #return costs[last][0] or INF
+        if costs[last][0] != 0 :return costs[last][0]
+        else: return 10**10
+    if cache[last][visited]: return cache[last][visited]
+    
+    temp = 10**10
+    for city in range(n):
+        if visited & (1<<city) == 0 and costs[last][city] != 0:
+            temp = min(temp, travel(city, visited | (1<<city))+costs[last][city])
+    
+    cache[last][visited] = temp
+    return temp
 
-print(tsp(costs))
+print(travel(0, 1<<0))
