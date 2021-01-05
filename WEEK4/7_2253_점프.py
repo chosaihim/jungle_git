@@ -1,42 +1,37 @@
 import sys
 input = sys.stdin.readline
-sys.setrecursionlimit(10**6)
+from collections import deque
 
 ### INPUT
 N, M = map(int, input().split()) # N(2 ≤ N ≤ 10,000): num of stones, M(0 ≤ M ≤ N-2): num of small
-smalls = [int(input())-1 for _ in range(M)]
-smalls.sort()
+small = [0] * N
+for _ in range(M): small[int(input())-1] = 1 #전체 돌 중에서 작은 애들만 1 넣어줌. 나머지는 0
 
-# print(f'N:{N}, M:{M}')
-# print(f'smalls:{smalls}')
-cache = [[0]*(1<<N) for _ in range(N)]
+## 변수 세팅
+cache = [[0]*200 for _ in range(N)]
 dx = [-1, 0, 1]
 
-def jump(stone_num, jump_dist):
+## BFS
+def bfs(_root, _jump, _depth):
+    queue = deque()
+    queue.append([_root,_jump,_depth])
+    cache[_root][_jump] = 1
 
-    # print(f'stone_num:{stone_num} with jump:{jump_dist}')
-    
-    if stone_num == N-1: return 1
-    # if stone_num in smalls or stone_num > N: return 10**10
+    while queue:
+        v, jump, depth = queue.popleft()
 
-    if cache[stone_num][jump_dist]:return cache[stone_num][jump_dist]
+        if v == N-1: return depth
 
-    temp = 10**10
-    for d_jump in dx:
-        jump_now = jump_dist + d_jump
-        next_try = stone_num+jump_now
-        # print(f'try to jump to {next_try}')
-        if jump_now > 0 and stone_num+jump_now < N and stone_num+jump_now not in smalls:
-            temp = min(temp, jump(stone_num+jump_now, jump_now)+1)
-    
-    cache[stone_num][jump_dist] = temp
-    return temp
-    # return 1
+        if v + jump - 1 < N:
+            for d_jump in dx:
+                jump_now = jump + d_jump
+                next_stone = v + jump_now
+                if jump_now > 0 and next_stone < N and not small[next_stone] and not cache[v][jump_now]:
+                    queue.append([next_stone,jump_now,depth+1])
+                    cache[v][jump_now] = 1
 
-
-# print(f'answer: {jump(0,1)}')
-# print(jump(1,1))
-answer = jump(1,1)
-if answer > 10**9: print(-1)
+## 실행
+answer = bfs(1,1,1)
+if answer is None: print(-1)
 else: print(answer)
-    
+        
