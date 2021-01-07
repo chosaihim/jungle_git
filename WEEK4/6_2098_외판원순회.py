@@ -17,7 +17,7 @@ def travel(start, visited):
     temp = 10**10
     for city in range(n):
         if visited & (1<<city) == 0 and costs[start][city] != 0:
-            temp = min(temp, travel(city, visited | (1<<city))+costs[start][city])
+            temp = min(temp, travel(city, visited | (1<<city)) + costs[start][city])
     
     cache[start][visited] = temp
     return temp
