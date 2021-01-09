@@ -2,7 +2,7 @@
 #include <stdlib.h>     //malloc, free
 
 typedef struct _NODE{
-    struct NODE *next;
+    struct _NODE *next;
     int data;
 }NODE;
 
