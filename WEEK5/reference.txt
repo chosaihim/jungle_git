@@ -1,0 +1,44 @@
+Algorithm 9 B+-tree: fusing
+------
+fuse(parent : node, i : index, j : index ):
+    empty = parent.p[i]                     //왼쪽 노드. 그대로 유지하고 뒤에 값을 더 붙일 노드
+    neighbour = parent.p[j]                 //오른쪽 노드. 값만 왼쪽 노드로 넘겨주고 사라질 노드
+if i < j then                                   
+    
+    {move elements from right to left}
+    //내려갈 곳이(왼쪽 노드가) leaf라면?? --> COPY UP
+    if empty.leaf then
+        for k = 0 to neighbour.n ? 1 do     //오른쪽 key랑 children 전부 복사해옴
+            empty.p[empty.n + k] = neighbour.p[k]
+            empty.key[empty.n + k] = neighbour.key[k]
+        end for
+        parent.key[i] = empty.key[empty.n + neighbour.n ? 1] // 마지막 키를 parent에 넣어준다.
+        //****** 복사하는건가???
+
+    // 내려갈 곳이 리프가 아니면?? --> PUSH UP (원래하듯이?)
+    else 
+        for k = 0 to neighbour.n ? 1 do     //child 값 싹 복사
+            empty.p[empty.n + k] = neighbour.p[k]
+        end for
+        empty.key[empty.n] = parent.key[i]  // 중간에 parent의 key 값 복사
+        for k = 0 to neighbour.n ? 2 do     // 그 뒤로 형제의 key 값 싹 복사
+            empty.key[empty.n + k] = neighbour.key[k]
+        end for
+    end if
+
+else    
+    {move elements from left to right}
+    return fuse(parent, j, i)
+end if
+
+for k = j to n ? 1 do
+    parent.p[k] = parent.p[k + 1]   // child 하나 지워쓰니 싹 땡겨옵니다.
+end for
+for k = j to n ? 2 do
+    parent.key[k] = parent.key[k + 1] //key 도 하나 지웠으니, 싹 땡겨옵니다.
+end for
+
+parent.n = parent.n ? 1     //하나 지웠으니, 갯수도 하나 줄이고
+empty.n = empty.n + neighbour.n     //얜 합쳤으니 갯수 늘려주고
+
+node-free(neighbour)    //다 쓴 친구는 free
