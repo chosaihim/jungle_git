@@ -14,7 +14,7 @@ int main()
 	root->N = 0;
 	root->isLeaf = true;
 
-	//printf("Â÷¼ö¸¦ ÀÔ·ÂÇÏ¼¼¿ä : ");
+	//printf("ì°¨ìˆ˜ë¥¼ ì…ë ¥í•˜ì„¸ìš” : ");
 	//scanf("%d", DEGREE);
 	//MAX_DEGREE = (int)((DEGREE + 1) / 2);
 	//MIN_DEGREE = DEGREE - 1;
@@ -22,35 +22,35 @@ int main()
 
 	while (1)
 	{
-		int input=0;
+		int input = 0;
 		int val = 0;
 		int flag = 0;
 		int issearch = 0;
-		printf("\n1.Á¶È¸\t2/»ğÀÔ\t3.»èÁ¦\t4.Ãâ·Â\t5.Á¾·á :");
+		printf("\n1.ì¡°íšŒ\t2/ì‚½ì…\t3.ì‚­ì œ\t4.ì¶œë ¥\t5.ì¢…ë£Œ :");
 		scanf("%d", &input);
 
 		switch (input) {
 		case 1:
-			printf("°ªÀ» ÀÔ·ÂÇÏ¼¼¿ä : ");
+			printf("ê°’ì„ ì…ë ¥í•˜ì„¸ìš” : ");
 			scanf("%d", &val);
 			issearch = searchNode(root, val);
 			if (issearch)
-				printf("°ªÀÌ Á¸ÀçÇÕ´Ï´Ù !! ¤¾¤¾");
+				printf("ê°’ì´ ì¡´ì¬í•©ë‹ˆë‹¤ !! ã…ã…");
 			else
-				printf("°ªÀÌ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù. ¤Ğ¤Ğ");
+				printf("ê°’ì´ ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤. ã… ã… ");
 			break;
 		case 2:
-			printf("°ªÀ» ÀÔ·ÂÇÏ¼¼¿ä : ");
+			printf("ê°’ì„ ì…ë ¥í•˜ì„¸ìš” : ");
 
 			scanf("%d", &val);
 
 			if (!searchNode(root, val))
 				insertTree(&root, val);
-			
+
 			break;
-				
+
 		case 3:
-			printf("°ªÀ» ÀÔ·ÂÇÏ¼¼¿ä : ");
+			printf("ê°’ì„ ì…ë ¥í•˜ì„¸ìš” : ");
 			scanf("%d", &val);
 
 			if (searchNode(root, val))
@@ -63,14 +63,14 @@ int main()
 			flag = 1;
 			break;
 		default:
-			printf("ÀÎ½ÄÇÒ ¼ö ¾ø´Â °ªÀÔ´Ï´Ù.");
+			printf("ì¸ì‹í•  ìˆ˜ ì—†ëŠ” ê°’ì…ë‹ˆë‹¤.");
 			break;
 		}
 		if (flag)
 			break;
 	}
 
-	/* ·£´ı °ª ³Ö¾î¼­ µğ¹ö±ë */
+	/* ëœë¤ ê°’ ë„£ì–´ì„œ ë””ë²„ê¹… */
 
 	//int val = 0;
 	//int flag = 0;

@@ -13,7 +13,7 @@ int MAX_DEGREE = DEGREE - 1;
 Node* createNode()
 {
 	Node* newNode = (Node*)malloc(sizeof(Node));
-	// »ðÀÔ°úÁ¤¿¡¼­ ÇÊ¿äÇÏ¿©, ÇÏ³ª¾¿ ´õ Ãß°¡
+	// ì‚½ìž…ê³¼ì •ì—ì„œ í•„ìš”í•˜ì—¬, í•˜ë‚˜ì”© ë” ì¶”ê°€
 	Node** children = (Node**)malloc((DEGREE + 2) * sizeof(Node*));
 	int* key = (int*)malloc((DEGREE + 1) * sizeof(int));
 
@@ -31,22 +31,22 @@ int searchNode(Node* root, int k)
 	{
 		idx--;
 	}
-	
-	// ¸®ÇÁ°¡ ¾Æ´Ï¸é
+
+	// ë¦¬í”„ê°€ ì•„ë‹ˆë©´
 	if (!root->isLeaf)
 		return searchNode(root->C[idx], k);
 
 	else
 	{
 		idx--;
-		// Ã£¾Ò¾î
+		// ì°¾ì•˜ì–´
 		if ((idx >= 0) && k == root->Key[idx])
 			return 1;
-		// ¸øÃ£¾Ò¾î
+		// ëª»ì°¾ì•˜ì–´
 		else
 			return 0;
 	}
-	
+
 }
 
 
@@ -54,22 +54,22 @@ void insertTree(Node** root, int k)
 {
 
 
-		Node* tmp = *root;
-		if (((*root)->N == MAX_DEGREE))
-		{
-			// ·çÆ®°¡ µÉ ³ëµå »ý¼º
-			Node* to_be_root = createNode();
-			*root = to_be_root;
-			to_be_root->isLeaf = false;
-			to_be_root->N = 0;
-			to_be_root->C[0] = tmp;
-			splitChild(to_be_root, 0);
-			insertNonfull(to_be_root, k);
-		}
-		else
-		{
-			insertNonfull(*root, k);
-		}
+	Node* tmp = *root;
+	if (((*root)->N == MAX_DEGREE))
+	{
+		// ë£¨íŠ¸ê°€ ë  ë…¸ë“œ ìƒì„±
+		Node* to_be_root = createNode();
+		*root = to_be_root;
+		to_be_root->isLeaf = false;
+		to_be_root->N = 0;
+		to_be_root->C[0] = tmp;
+		splitChild(to_be_root, 0);
+		insertNonfull(to_be_root, k);
+	}
+	else
+	{
+		insertNonfull(*root, k);
+	}
 
 }
 
@@ -93,14 +93,14 @@ void insertNonfull(Node* root, int k)
 		{
 			idx--;
 		}
-		// ³»°¡ µé¾î°¥ °ø°£ À§¿¡ ¼­ÀÖ¾î
+		// ë‚´ê°€ ë“¤ì–´ê°ˆ ê³µê°„ ìœ„ì— ì„œìžˆì–´
 		idx++;
 
-		// ³»°¡ µé¾î°¥ ÀÚ³àµéÀÌ °¡µæ Ã¡À¸¸é
+		// ë‚´ê°€ ë“¤ì–´ê°ˆ ìžë…€ë“¤ì´ ê°€ë“ ì°¼ìœ¼ë©´
 		if (root->C[idx]->N == MAX_DEGREE)
 		{
 			splitChild(root, idx);
-			// split ÈÄ root¿¡ °ªÀÌ Ãß°¡µÇ´Ï±î ³»°¡ ¾îµð·Î µé¾î°¥ Áö ´Ù½Ã È®ÀÎ
+			// split í›„ rootì— ê°’ì´ ì¶”ê°€ë˜ë‹ˆê¹Œ ë‚´ê°€ ì–´ë””ë¡œ ë“¤ì–´ê°ˆ ì§€ ë‹¤ì‹œ í™•ì¸
 			if (k > root->Key[idx])
 				idx++;
 		}
@@ -114,58 +114,58 @@ void splitChild(Node* parent, int idx)
 	Node* right = createNode();
 	Node* left = parent->C[idx];
 	right->isLeaf = left->isLeaf;
-	//******************°³¼ö ¼³Á¤ÇØÁà¾ßÇÔ************************
+	//******************ê°œìˆ˜ ì„¤ì •í•´ì¤˜ì•¼í•¨************************
 	//right->N = MIN_DEGREE - 1;
 
-	// ÂõÀ» ³ðÀÌ ¸®ÇÁÀÏ¶§, ºÎ¸ðÇÑÅ× º¹»çÇØ¼­ ¿Ã·ÁÁÜ (copy up)
+	// ì°¢ì„ ë†ˆì´ ë¦¬í”„ì¼ë•Œ, ë¶€ëª¨í•œí…Œ ë³µì‚¬í•´ì„œ ì˜¬ë ¤ì¤Œ (copy up)
 	if (left->isLeaf)
 	{
 
 		right->Next = left->Next;
 		left->Next = right;
-		// ¿À¸¥ÂÊ¿¡ ¿ÞÂÊÀÇ µÞ°ªµéÀ» ³Ö¾îÁÖ°í
+		// ì˜¤ë¥¸ìª½ì— ì™¼ìª½ì˜ ë’·ê°’ë“¤ì„ ë„£ì–´ì£¼ê³ 
 		for (int i = 0; i < MIN_DEGREE - 1; i++)
 		{
-			// ¿ÞÂÊÀÌ ¶×¶×ÇØÁü
+			// ì™¼ìª½ì´ ëš±ëš±í•´ì§
 			right->Key[i] = left->Key[i + MIN_DEGREE];
-			// ¸®ÇÁ¿Í, ³»ºÎ ³ëµå ¸ðµå C(ÀÚ³à)µéÀ» °®´Â´Ù.
+			// ë¦¬í”„ì™€, ë‚´ë¶€ ë…¸ë“œ ëª¨ë“œ C(ìžë…€)ë“¤ì„ ê°–ëŠ”ë‹¤.
 		}
 
-		// ´ÙÀ½ ³ëµå¸¦ °¡¸®Å°°Ô ¿¬°á
+		// ë‹¤ìŒ ë…¸ë“œë¥¼ ê°€ë¦¬í‚¤ê²Œ ì—°ê²°
 		right->N = MIN_DEGREE - 1;
 		left->N = MIN_DEGREE;
 
 
-		//(ºÎ¸ð) ¹Ð°í, Áß°£ÀÚ¸¦ ¿Ã¸®°í, ÀÚ½Ä ¿¬°á½ÃÅ°°í
-		// ÀÚ½Ä ¿Ã¶ó°¥ ³à¼® ÀÚ¸® ¸¶·Ã
-		// idx N ÀÌ¸é, parent-> N : N-1, idx : N ÀÌ¶ó¼­ for¹®ÀÌ µ¹Áö ¾ÊÀ½!
+		//(ë¶€ëª¨) ë°€ê³ , ì¤‘ê°„ìžë¥¼ ì˜¬ë¦¬ê³ , ìžì‹ ì—°ê²°ì‹œí‚¤ê³ 
+		// ìžì‹ ì˜¬ë¼ê°ˆ ë…€ì„ ìžë¦¬ ë§ˆë ¨
+		// idx N ì´ë©´, parent-> N : N-1, idx : N ì´ë¼ì„œ forë¬¸ì´ ëŒì§€ ì•ŠìŒ!
 		for (int i = parent->N; i >= idx; i--)
 		{
 			parent->C[i + 1] = parent->C[i];
 		}
-		// idx°¡ NÀÌ¾îµµ, °ªÀÌ Ãß°¡µÇ´Ï±î
+		// idxê°€ Nì´ì–´ë„, ê°’ì´ ì¶”ê°€ë˜ë‹ˆê¹Œ
 		parent->C[idx + 1] = right;
-		// Å° ¿Ã¶ó°¥ ³à¼® ÀÚ¸® ¸¶·Ã
+		// í‚¤ ì˜¬ë¼ê°ˆ ë…€ì„ ìžë¦¬ ë§ˆë ¨
 		for (int i = parent->N - 1; i >= idx; i--)
 		{
 			parent->Key[i + 1] = parent->Key[i];
 		}
-		// ºÎ¸ð¿¡ Å° »ðÀÔ
+		// ë¶€ëª¨ì— í‚¤ ì‚½ìž…
 		parent->Key[idx] = right->Key[0];
 		parent->N++;
 
 	}
 
-	//¸®ÇÁ°¡ ¾Æ´Ï¸é, (B TREE ¿Í µ¿ÀÏ )
+	//ë¦¬í”„ê°€ ì•„ë‹ˆë©´, (B TREE ì™€ ë™ì¼ )
 	else
 	{
-		// ¿À¸¥ÂÊ¿¡ ¿ÞÂÊÀÇ µÞ°ªµéÀ» ³Ö¾îÁÖ°í
+		// ì˜¤ë¥¸ìª½ì— ì™¼ìª½ì˜ ë’·ê°’ë“¤ì„ ë„£ì–´ì£¼ê³ 
 		for (int i = 0; i < MIN_DEGREE - 1; i++)
 		{
-			// ¿ÞÂÊÀÌ ¶×¶×ÇØÁü
+			// ì™¼ìª½ì´ ëš±ëš±í•´ì§
 			right->Key[i] = left->Key[i + MIN_DEGREE];
 		}
-		// ¸®ÇÁ¿Í, ³»ºÎ ³ëµå ¸ðµå C(ÀÚ³à)µéÀ» °®´Â´Ù.
+		// ë¦¬í”„ì™€, ë‚´ë¶€ ë…¸ë“œ ëª¨ë“œ C(ìžë…€)ë“¤ì„ ê°–ëŠ”ë‹¤.
 		for (int i = 0; i < MIN_DEGREE; i++)
 		{
 			right->C[i] = left->C[i + MIN_DEGREE];
@@ -174,20 +174,20 @@ void splitChild(Node* parent, int idx)
 		left->N = MIN_DEGREE - 1;
 		right->N = MIN_DEGREE - 1;
 
-		// ÀÚ½Ä ¿Ã¶ó°¥ ³à¼® ÀÚ¸® ¸¶·Ã
-		// idx N ÀÌ¸é, parent-> N : N-1, idx : N ÀÌ¶ó¼­ for¹®ÀÌ µ¹Áö ¾ÊÀ½!
+		// ìžì‹ ì˜¬ë¼ê°ˆ ë…€ì„ ìžë¦¬ ë§ˆë ¨
+		// idx N ì´ë©´, parent-> N : N-1, idx : N ì´ë¼ì„œ forë¬¸ì´ ëŒì§€ ì•ŠìŒ!
 		for (int i = parent->N; i >= idx; i--)
 		{
 			parent->C[i + 1] = parent->C[i];
 		}
-		// idx°¡ NÀÌ¾îµµ, °ªÀÌ Ãß°¡µÇ´Ï±î
+		// idxê°€ Nì´ì–´ë„, ê°’ì´ ì¶”ê°€ë˜ë‹ˆê¹Œ
 		parent->C[idx + 1] = right;
-		// Å° ¿Ã¶ó°¥ ³à¼® ÀÚ¸® ¸¶·Ã
+		// í‚¤ ì˜¬ë¼ê°ˆ ë…€ì„ ìžë¦¬ ë§ˆë ¨
 		for (int i = parent->N - 1; i >= idx; i--)
 		{
 			parent->Key[i + 1] = parent->Key[i];
 		}
-		// ºÎ¸ð¿¡ Å° »ðÀÔ
+		// ë¶€ëª¨ì— í‚¤ ì‚½ìž…
 		parent->Key[idx] = left->Key[MIN_DEGREE - 1];
 		parent->N++;
 	}
@@ -206,7 +206,7 @@ void printAll(Node* root, int depth)
 			printf("%6d", node->Key[vIdx]);
 		}
 
-		printf("\t´ÙÀ½ ÀÚ½ÄÀº : %p", node->Next);
+		printf("\të‹¤ìŒ ìžì‹ì€ : %p", node->Next);
 		return;
 	}
 	if (!node->isLeaf) {
@@ -225,12 +225,12 @@ void printAll(Node* root, int depth)
 void deleteTree(Node** root, int k)
 {
 
-	// ¾È¿¡ ¾øÀ» ¶§¸¸ »èÁ¦ ½ÃÀÛ
+	// ì•ˆì— ì—†ì„ ë•Œë§Œ ì‚­ì œ ì‹œìž‘
 
 	int idx = (*root)->N;
 
-	// ³ªº¸´Ù ´Ù Å©¸é, 0¿¡ ¼­°Ô µÊ
-	// ³»°¡ Á¦ÀÏ Å©¸é N¿¡ ¼­ÀÖÀ½
+	// ë‚˜ë³´ë‹¤ ë‹¤ í¬ë©´, 0ì— ì„œê²Œ ë¨
+	// ë‚´ê°€ ì œì¼ í¬ë©´ Nì— ì„œìžˆìŒ
 	while (idx > 0 & (*root)->Key[idx - 1] > k)
 	{
 		idx--;
@@ -238,29 +238,29 @@ void deleteTree(Node** root, int k)
 
 	const int goal_idx = idx;
 
-	// µé¾î¿Â ³Ê ¸®ÇÁ¾ß?
+	// ë“¤ì–´ì˜¨ ë„ˆ ë¦¬í”„ì•¼?
 	if ((*root)->isLeaf)
 	{
-		// ³ª´Â Key[goal_idx - 1]ÀÌ´Ù.
+		// ë‚˜ëŠ” Key[goal_idx - 1]ì´ë‹¤.
 		for (int i = goal_idx - 1; i < ((*root)->N) - 1; i++)
 		{
 			(*root)->Key[i] = (*root)->Key[i + 1];
 		}
 		(*root)->N--;
 	}
-	// ¸®ÇÁ¾Æ´Ï¾ß ( == ³ª ´õ µé¾î°¥ ¼ö ÀÖ¾î !!)
+	// ë¦¬í”„ì•„ë‹ˆì•¼ ( == ë‚˜ ë” ë“¤ì–´ê°ˆ ìˆ˜ ìžˆì–´ !!)
 	else
 	{
 		Node* Target = (*root)->C[goal_idx];
 		if (Target->N < MIN_DEGREE)
 		{
-			// ÀÚ½ÄÀÌ ¾È¶×¶×ÇÑµ¥, ¸®ÇÁ¾ß
+			// ìžì‹ì´ ì•ˆëš±ëš±í•œë°, ë¦¬í”„ì•¼
 			if (Target->isLeaf)
 			{
-				// ¿À¸¥ÂÊ ³¡¿¡ ¼­ÀÖÀ¸¸é, ¹«Á¶°Ç ¿ÞÂÊ ÇüÁ¦°¡ ÇüÁ¦´Ù.
+				// ì˜¤ë¥¸ìª½ ëì— ì„œìžˆìœ¼ë©´, ë¬´ì¡°ê±´ ì™¼ìª½ í˜•ì œê°€ í˜•ì œë‹¤.
 				if (goal_idx == (*root)->N)
 				{
-					// ºô·Á¿Â´Ù -> ³¡°ªÀ» ºô·Á¿À°í, ºÎ¸ð¸¦ ¾÷µ¥ÀÌÆ® ÇØÁà¾ßÇÔ
+					// ë¹Œë ¤ì˜¨ë‹¤ -> ëê°’ì„ ë¹Œë ¤ì˜¤ê³ , ë¶€ëª¨ë¥¼ ì—…ë°ì´íŠ¸ í•´ì¤˜ì•¼í•¨
 					Node* Sibling = (*root)->C[goal_idx - 1];
 					if (Sibling->N >= MIN_DEGREE)
 					{
@@ -276,7 +276,7 @@ void deleteTree(Node** root, int k)
 					}
 					else
 					{
-						// ÇÕÄ£´Ù.
+						// í•©ì¹œë‹¤.
 						for (int i = 0; i < Target->N; i++)
 						{
 							Sibling->Key[(Sibling->N) + i] = Target->Key[i];
@@ -289,25 +289,25 @@ void deleteTree(Node** root, int k)
 						(*root)->N--;
 						if ((*root)->N == 0)
 						{
-							//printf("\nroot°¡ ¹Ù²ò´Ï´Ù \n");
+							//printf("\nrootê°€ ë°”ë€ë‹ˆë‹¤ \n");
 							*root = Target;
 						}
 					}
 
 				}
 
-				// ±× ¿Ü¿¡´Â, ¹«Á¶°Ç ¿À¸¥ÂÊ ÇüÁ¦°¡ ÇüÁ¦´Ù.
+				// ê·¸ ì™¸ì—ëŠ”, ë¬´ì¡°ê±´ ì˜¤ë¥¸ìª½ í˜•ì œê°€ í˜•ì œë‹¤.
 				else
 				{
 					Node* Sibling = (*root)->C[goal_idx + 1];
-					// ÇüÁ¦ ¶×¶×ÇØ ? -> ºô·Á¿Ã°Å¾ß
+					// í˜•ì œ ëš±ëš±í•´ ? -> ë¹Œë ¤ì˜¬ê±°ì•¼
 					if (Sibling->N >= MIN_DEGREE)
 					{
 						Target->Key[Target->N] = (*root)->Key[goal_idx];
 						Target->N++;
-						// ³¡ Child ¿¡ Sibling ¿¬°á½ÃÄÑÁØ´Ù.
+						// ë Child ì— Sibling ì—°ê²°ì‹œì¼œì¤€ë‹¤.
 
-						// ÇüÁ¦ÀÇ Å° °ª ´ç±ä´Ù.
+						// í˜•ì œì˜ í‚¤ ê°’ ë‹¹ê¸´ë‹¤.
 						for (int i = 0; i < (Sibling->N) - 1; i++)
 						{
 							Sibling->Key[i] = Sibling->Key[i + 1];
@@ -316,7 +316,7 @@ void deleteTree(Node** root, int k)
 						Sibling->N--;
 						(*root)->Key[goal_idx] = Sibling->Key[0];
 					}
-					// ÇüÁ¦µµ ¾È¶×¶×ÇØ -> ÇÕÄ¥°Å¾ß
+					// í˜•ì œë„ ì•ˆëš±ëš±í•´ -> í•©ì¹ ê±°ì•¼
 					else
 					{
 						for (int i = 0; i < Sibling->N; i++)
@@ -334,31 +334,31 @@ void deleteTree(Node** root, int k)
 						(*root)->N--;
 						if ((*root)->N == 0)
 						{
-							//printf("\nroot°¡ ¹Ù²ò´Ï´Ù \n");
+							//printf("\nrootê°€ ë°”ë€ë‹ˆë‹¤ \n");
 							*root = Target;
 						}
 						//free(Sibling);
 					}
 				}
 			}
-			// ÀÚ½ÄÀÌ ¾È¶×¶×ÇÑµ¥, ¸®ÇÁ°¡ ¾Æ´Ï¾ß
+			// ìžì‹ì´ ì•ˆëš±ëš±í•œë°, ë¦¬í”„ê°€ ì•„ë‹ˆì•¼
 			else
 			{
-				// ¿À¸¥ÂÊ ³¡¿¡ ¼­ÀÖ´Ù.
+				// ì˜¤ë¥¸ìª½ ëì— ì„œìžˆë‹¤.
 				if (goal_idx == (*root)->N)
 				{
 					Node* Sibling = (*root)->C[goal_idx - 1];
-					// ÇüÁ¦ ¶×¶×ÇØ
+					// í˜•ì œ ëš±ëš±í•´
 					if (Sibling->N >= MIN_DEGREE)
 					{
-						// ºô¸±°Å¾ß
-						// Target Å° µÚ·Î ¹Ð±â
-						for (int i = Target->N; i >0; i--)
+						// ë¹Œë¦´ê±°ì•¼
+						// Target í‚¤ ë’¤ë¡œ ë°€ê¸°
+						for (int i = Target->N; i > 0; i--)
 						{
 							Target->Key[i] = Target->Key[i - 1];
 
 						}
-						// Target ÀÚ½Äµé ¹Ð±â
+						// Target ìžì‹ë“¤ ë°€ê¸°
 						for (int i = Target->N; i >= 0; i--)
 						{
 							Target->C[i + 1] = Target->C[i];
@@ -371,12 +371,12 @@ void deleteTree(Node** root, int k)
 
 
 					}
-					// ÇüÁ¦ ¾È¶×¶×ÇØ
+					// í˜•ì œ ì•ˆëš±ëš±í•´
 					else
 					{
-						// ÇÕÄ¥°Å¾ß
-						Sibling->Key[Sibling->N] = (*root)->Key[goal_idx-1];
-						// TargetÀÇ °ªÀ» Sibling ¿¡ º¹»çÇÒ°Å¾ß
+						// í•©ì¹ ê±°ì•¼
+						Sibling->Key[Sibling->N] = (*root)->Key[goal_idx - 1];
+						// Targetì˜ ê°’ì„ Sibling ì— ë³µì‚¬í• ê±°ì•¼
 						for (int i = 0; i < Target->N; i++)
 						{
 							Sibling->Key[((Sibling->N) + 1) + i] = Target->Key[i];
@@ -392,44 +392,44 @@ void deleteTree(Node** root, int k)
 						(*root)->N--;
 						if ((*root)->N == 0)
 						{
-							//printf("root°¡ ¹Ù²ò´Ï´Ù \n");
+							//printf("rootê°€ ë°”ë€ë‹ˆë‹¤ \n");
 							*root = Target;
 						}
 					}
 				}
-				// ±× ¿Ü
+				// ê·¸ ì™¸
 				else
 				{
 					Node* Sibling = (*root)->C[goal_idx + 1];
 					if (Sibling->N >= MIN_DEGREE)
 					{
-						// ºô¸±°Å¾ß
+						// ë¹Œë¦´ê±°ì•¼
 						Target->Key[Target->N] = (*root)->Key[goal_idx];
 						Target->N++;
-						// ÀÚ½Ä±îÁö º¸³½´Ù.
+						// ìžì‹ê¹Œì§€ ë³´ë‚¸ë‹¤.
 						Target->C[(Target->N)] = Sibling->C[0];
 
 						(*root)->Key[goal_idx] = Sibling->Key[0];
 
-						// ÇüÁ¦ÀÇ Å° °ª ´ç±ä´Ù.
+						// í˜•ì œì˜ í‚¤ ê°’ ë‹¹ê¸´ë‹¤.
 						for (int i = 0; i < (Sibling->N) - 1; i++)
 						{
 							Sibling->Key[i] = Sibling->Key[i + 1];
 						}
-						
-						// ÇüÁ¦ÀÇ C ´ç±ä´Ù.
+
+						// í˜•ì œì˜ C ë‹¹ê¸´ë‹¤.
 						for (int i = 0; i < Sibling->N; i++)
 						{
 							Sibling->C[i] = Sibling->C[i + 1];
 						}
 						Sibling->N--;
 					}
-					// ÇüÁ¦ ¾È¶×¶×ÇØ
+					// í˜•ì œ ì•ˆëš±ëš±í•´
 					else
 					{
-						// ÇÕÄ¥°Å¾ß
-						// ¸®ÇÁ°¡ ¾Æ´Ï¸é ºÎ¸ðµµ ³ÖÀ»°Å¾ß
-						// ¿À¸¥ÂÊ ÇüÁ¦¿Í ÇÕÄ¥ ¶§, ºÎ¸ð¸¦ ³»¸®¸é ±× ºÎ¸ð´Â goal_idx¿¡ ÀÖ´Ù.
+						// í•©ì¹ ê±°ì•¼
+						// ë¦¬í”„ê°€ ì•„ë‹ˆë©´ ë¶€ëª¨ë„ ë„£ì„ê±°ì•¼
+						// ì˜¤ë¥¸ìª½ í˜•ì œì™€ í•©ì¹  ë•Œ, ë¶€ëª¨ë¥¼ ë‚´ë¦¬ë©´ ê·¸ ë¶€ëª¨ëŠ” goal_idxì— ìžˆë‹¤.
 						Target->Key[Target->N] = (*root)->Key[goal_idx];
 						for (int i = 0; i < Sibling->N; i++)
 						{
@@ -452,11 +452,11 @@ void deleteTree(Node** root, int k)
 						(*root)->N--;
 						if ((*root)->N == 0)
 						{
-							//printf("root°¡ ¹Ù²ò´Ï´Ù \n");
+							//printf("rootê°€ ë°”ë€ë‹ˆë‹¤ \n");
 							*root = Target;
 						}
 						//free(Sibling);
-						
+
 					}
 				}
 			}
