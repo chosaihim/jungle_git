@@ -14,7 +14,7 @@ typedef struct _NODE {
 
 //Node* searchNode(Node* root, int k);
 
-// ³ëµå ÃÊ±âÈ­, ³ëµå Å½»ö, °ª »ğÀÔ - (Æ®¸® ±âÁØ, non-full), ÀÚ³à ºĞ¸®
+// ë…¸ë“œ ì´ˆê¸°í™”, ë…¸ë“œ íƒìƒ‰, ê°’ ì‚½ì… - (íŠ¸ë¦¬ ê¸°ì¤€, non-full), ìë…€ ë¶„ë¦¬
 Node* createNode();
 void insertTree(Node** root, int k);
 void insertNonfull(Node* root, int k);

@@ -6,7 +6,7 @@
 #include "header.h"
 
 
-// ?¡À??¡Æ? ????¡Æ? ????¡Æ¨©¢¥?
+// ì°¨ìˆ˜ê°€ ì§ìˆ˜ê°€ ë“¤ì–´ê°„ë‹¤
 #define DEGREE 8
 
 int MIN_DEGREE = (int)((DEGREE + 1) / 2);
@@ -16,8 +16,8 @@ Node* createNode()
 {
 	Node* newNode = (Node*)malloc(sizeof(Node));
 	//int MIN_DEGREE = ceil(DEGREE/2);
-	// ????¢¬? ¢¥?¡Æ? ??¢¥? ©©??????? ???¡©?¡© ?? ¡Æ????? ?¡×???? ???©¬?¡À????
-	// ex_ int ???¡©?? ¢¥??? ?¡×???¡©¢¥? int *?? ??????¢¥?.
+	// ì£¼ì†Œë¥¼ ë‹´ê³  ìˆëŠ” ë…€ì„ë“¤ì„ ë°°ì—´í™” í•  ê²ƒì´ê¸° ë•Œë¬¸ì— ì´ì¤‘í¬ì¸í„°
+	// ex_ int ë°°ì—´ì„ ë‹´ê¸° ìœ„í•´ì„œëŠ” int *ì„ ì‚¬ìš©í•œë‹¤.
 	Node** children = (Node**)malloc((DEGREE + 1) * sizeof(Node*));
 	int* key = (int*)malloc(DEGREE * sizeof(int));
 
@@ -36,23 +36,23 @@ int searchNode(Node* root, int k)
 	{
 		idx--;
 	}
-	// ©©? ©©?¢¥?? : NO !!
-	// ????¢©? ??¢§? ?©¬?? ¡Æ?¢¥??? ¢¬??? ????¢¬¢¬ ???¢©
+	// ë„ˆ ë‚˜ë‹ˆ? : NO !!
+	// ì¸ë±ìŠ¤ ì—ëŸ¬ ë°œìƒ ê°€ëŠ¥ì„± ë§¤ìš° ì ì§€ë§Œ ìˆìŒ
 	if (idx < 0 || root->Key[idx] != k)
 		idx++;
 
-	// ?¨©???¢¬¢¬??
+	// ì°¾ì•˜ìœ¼ë©´?
 	if ((idx < root->N) && (k == root->Key[idx]))
 	{
 		return 1;
 	}
-	// ?¨©?¨©??¡Æ?, ¢¬????©¬
+	// ëª¿ì°¾ì•˜ê³ , ë¦¬í”„ì•¼
 	else if (root->isLeaf)
 	{
-		// ¢¬??¨©?¢¬¢¬? NULL
+		// ëª»ì°¾ìœ¼ë©´ NULL
 		return 0;
 	}
-	// ¢¬??¨©??¡Æ?, ¢¬??? ??¢¥??©¬
+	// ëª»ì°¾ì•˜ê³ , ë¦¬í”„ ì•„ë‹ˆì•¼
 	else
 	{
 		return searchNode(root->C[idx], k);
@@ -65,7 +65,7 @@ void insertTree(Node** root, int k)
 	Node* tmp = *root;
 	if (((*root)->N == MAX_DEGREE))
 	{
-		// ¢§???¡Æ? ?? ©©??? ????
+		// ë£¨íŠ¸ê°€ ë  ë…¸ë“œ ìƒì„±
 		Node* to_be_root = createNode();
 		*root = to_be_root;
 		to_be_root->isLeaf = false;
@@ -89,7 +89,7 @@ void splitChild(Node* parent, int idx)
 	right->N = MIN_DEGREE - 1;
 	for (int i = 0; i < MIN_DEGREE - 1; i++)
 	{
-		// ?????? ?¡¿?¡¿????
+		// ì™¼ìª½ì´ ëš±ëš±í•´ì§
 		right->Key[i] = left->Key[i + MIN_DEGREE];
 	}
 	if (!left->isLeaf)
@@ -100,18 +100,18 @@ void splitChild(Node* parent, int idx)
 		}
 	}
 	left->N = MIN_DEGREE - 1;
-	// ??¢©? ????¡Æ? ©©??? ??¢¬? ¢¬?¢§?
+	// ìì‹ ì˜¬ë¼ê°ˆ ë…€ì„ ìë¦¬ ë§ˆë ¨
 	for (int i = parent->N; i >= idx + 1; i--)
 	{
 		parent->C[i + 1] = parent->C[i];
 	}
 	parent->C[idx + 1] = right;
-	// ?¡Æ ????¡Æ? ©©??? ??¢¬? ¢¬?¢§?
+	// í‚¤ ì˜¬ë¼ê°ˆ ë…€ì„ ìë¦¬ ë§ˆë ¨
 	for (int i = parent->N - 1; i >= idx; i--)
 	{
 		parent->Key[i + 1] = parent->Key[i];
 	}
-	// ??¢¬©¢?? ?¡Æ ?©¢??
+	// ë¶€ëª¨ì— í‚¤ ì‚½ì…
 	parent->Key[idx] = left->Key[MIN_DEGREE - 1];
 	parent->N++;
 }
@@ -135,14 +135,14 @@ void insertNonfull(Node* root, int k)
 		{
 			num--;
 		}
-		// ©©?¡Æ? ????¡Æ? ¡Æ?¡Æ¨© ?¡×?? ?¡©????
+		// ë‚´ê°€ ë“¤ì–´ê°ˆ ê³µê°„ ìœ„ì— ì„œìˆì–´
 		num++;
 
-		// ©©?¡Æ? ????¡Æ? ??©©????? ¡Æ??? ???¢¬¢¬?
+		// ë‚´ê°€ ë“¤ì–´ê°ˆ ìë…€ë“¤ì´ ê°€ë“ ì°¼ìœ¼ë©´
 		if (root->C[num]->N == MAX_DEGREE)
 		{
 			splitChild(root, num);
-			// split ?? root?? ¡Æ??? ?©¬¡Æ???¢¥??? ©©?¡Æ? ???©¢¢§? ????¡Æ? ?? ¢¥?¢©? ????
+			// split í›„ rootì— ê°’ì´ ì¶”ê°€ë˜ë‹ˆê¹Œ ë‚´ê°€ ì–´ë””ë¡œ ë“¤ì–´ê°ˆ ì§€ ë‹¤ì‹œ í™•ì¸
 			if (k > root->Key[num])
 				num++;
 		}
@@ -156,36 +156,36 @@ void deleteTree(Node** root_address, Node* root, int k)
 	if (isIn) {
 		int idx = (root->N) - 1;
 
-		// ©©????? ?©©?¢©???? ?¡×?? ?¡©??¡Æ?, ©©??¢¬¢¥? ??©©©¢?? ©©??¢¬©©? ?¡× ????
+		// ëë¶€í„° ì²˜ìŒê¹Œì§€ ìœ„ì— ì„œìˆê³ , ë‚˜ë³´ë‹¤ í°ë†ˆì´ ë‚˜íƒ€ë‚  ë•Œ ê¹Œì§€
 		while (idx >= 0 && root->Key[idx] > k)
 		{
 			idx--;
 		}
 
-		// ©©? ©©?¢¥?? : NO !!
-		// ????¢©? ??¢§? ?©¬?? ¡Æ?¢¥??? ¢¬??? ????¢¬¢¬ ???¢©
+		// ë„ˆ ë‚˜ë‹ˆ? : NO !!
+		// ì¸ë±ìŠ¤ ì—ëŸ¬ ë°œìƒ ê°€ëŠ¥ì„± ë§¤ìš° ì ì§€ë§Œ ìˆìŒ
 		if (idx < 0 || root->Key[idx] != k)
 			idx++;
 
-		// ©©? ¢¬????? (= ©©?¡Æ? ????¡Æ??? ?????? idx)
+		// ë‚´ ëª©ì ì§€ (= ë‚´ê°€ ë“¤ì–´ê°€ê¸° ì ì ˆí•œ idx)
 		const int goal_idx = idx;
 
-		// ©©? ©©?©©??
+		// ë„ˆ ë‚˜ëƒ?
 		if (root->Key[goal_idx] == k)
 		{
-			//©©? ¢¬????©¬ ?
+			//ë„ˆ ë¦¬í”„ì•¼ ?
 			//YES
 			if (root->isLeaf)
 			{
-				// ??????
+				// ë•¡ê¸°ê¸°
 				for (int i = goal_idx; i < (root->N) - 1; i++)
 				{
 					root->Key[i] = root->Key[i + 1];
 				}
-				// ©©?¢¥? ¢§??? ???? ????????
+				// ë„ˆëŠ” ë£¨íŠ¸ ë³€í™˜ í•„ìš”ì—†ì–´
 				root->N--;
 			}
-			//NO -> ¢¥? ????¡Æ??©¬??
+			//NO -> ë” ë“¤ì–´ê°€ì•¼í•¨
 			else
 			{
 				Node* Left = root->C[goal_idx];
@@ -193,7 +193,7 @@ void deleteTree(Node** root_address, Node* root, int k)
 				int num_left = Left->N;
 				int num_right = Right->N;
 
-				// ??????
+				// ì„ í–‰ì
 				if (Left->N >= MIN_DEGREE)
 				{
 					int tmp = Left->Key[num_left - 1];
@@ -202,7 +202,7 @@ void deleteTree(Node** root_address, Node* root, int k)
 
 				}
 
-				// ??????
+				// í›„í–‰ì
 				else if (Right->N >= MIN_DEGREE)
 				{
 					//int num_right = Right->N;
@@ -211,19 +211,19 @@ void deleteTree(Node** root_address, Node* root, int k)
 					root->Key[goal_idx] = tmp;
 				}
 
-				// ??¢©? ??????
+				// ìì‹ í•©ì¹˜ê¸°
 				else
 				{
 
 
-					// ???? ??¢©??? ©©??? ??¢¬??? ??¢©? ??????
+					// ì™¼ìª½ ìì‹ì— ë‚˜ì™€ ì˜¤ë¥¸ìª½ ìì‹ í•©ì¹˜ê¸°
 					Left->Key[num_left] = k;
 					for (int i = 0; i < num_right; i++)
 					{
 						Left->Key[(num_left + 1) + i] = Right->Key[i];
 					}
 
-					// ????????
+					// ì£¼ì˜í•˜ì
 					if (!(Left->isLeaf))
 					{
 						for (int i = 0; i <= num_right; i++)
@@ -235,7 +235,7 @@ void deleteTree(Node** root_address, Node* root, int k)
 					Left->N = MAX_DEGREE;
 					free(Right);
 
-					// ??¢¬©¢ ?¡Æ & ??¢©? ??????
+					// ë¶€ëª¨ í‚¤ & ìì‹ ë•¡ê¸°ê¸°
 					for (int i = goal_idx; i < (root->N) - 1; i++)
 					{
 						root->Key[i] = root->Key[i + 1];
@@ -248,9 +248,9 @@ void deleteTree(Node** root_address, Node* root, int k)
 						*root_address = Left;
 					}
 
-					// ?????? + ?????? ??¢§? //
+					// ë•¡ê¸°ê¸° + í•©ì¹˜ê¸° ì™„ë£Œ //
 
-					// ???? ????
+					// ì¬ê·€ ì‚­ì œ
 
 					deleteTree(&Left, Left, k);
 
@@ -258,39 +258,39 @@ void deleteTree(Node** root_address, Node* root, int k)
 
 			}
 		}
-		// ©©? ???? ©©????? ????.
+		// ë‚˜ ì—¬ê¸° ë…¸ë“œì— ì—†ì–´.
 		else
 		{
 
 			Node* Target = root->C[goal_idx];
 			int num_Target = Target->N;
 
-			// ©©?¢§?¡Æ? ¡Æ¡À?? MIN_DEGREE?©¬ (?????¢´?? ) -> ???¢´??¡Æ? ¢¬¢¬??¡Æ??©¬
+			// ë‚´ë ¤ê°ˆ ê³³ì´ MIN_DEGREEì•¼ (ë¶ˆì•ˆì •í•´ ) -> ì•ˆì •í•˜ê²Œ ë§Œë“¤ê±°ì•¼
 			if (Target->N < MIN_DEGREE)
 			{
 				int right_idx = goal_idx + 1;
 				int left_idx = goal_idx - 1;
-				// merge (merge_target , ©©?)
-				// merge (©©? , merge_target)
+				// merge (merge_target , ë‚˜)
+				// merge (ë‚˜ , merge_target)
 
-				// ??¢¬??????? ¢¬??? ?¢¬¡Æ? (RIGHT ???©¢?? ???¡× ??¡Æ? ¡Æ??? ?? block ?????¡© < bc : idx error)
+				// ì˜¤ë¥¸ìª½í˜•ì œ ë¨¼ì € ë³´ê³  (RIGHT ì„ ì–¸ì€ ì´ë•Œ ì¡°ê±´ ê²€ì‚¬ í›„ block ì•ˆì—ì„œ < bc : idx error)
 				if (goal_idx != root->N && root->C[goal_idx + 1]->N >= MIN_DEGREE)
 				{
-					// ??¢§?????
+					// ë¹Œë ¤ì˜¤ê¸°
 					Node* Target_Right = root->C[goal_idx + 1];
 
-					// ¡Æ? ©©?¢¬???
+					// ê°’ ë‚´ë¦¬ê¸°
 					Target->Key[num_Target] = root->Key[goal_idx];
 
-					//?¡À???? ??¡Æ?????
+					//í¬ì¸í„° ì˜®ê²¨ì˜¤ê¸°
 					Target->C[num_Target + 1] = Target_Right->C[0];
 					Target->N++;
 
-					//©©??? ?¡Æ ¡Æ? ??¢­???
+					//ë…¸ë“œ í‚¤ ê°’ ë°”ê¾¸ê¸°
 					root->Key[goal_idx] = Target_Right->Key[0];
 
-					//???? ?¡Æ ??????,
-					//???? ?¡À???? ??????
+					//í˜•ì œ í‚¤ ë•¡ê¸°ê¸°,
+					//í˜•ì œ í¬ì¸í„° ë•¡ê¸°ê¸°
 
 					for (int i = 0; i < (Target_Right->N) - 1; i++)
 					{
@@ -303,23 +303,23 @@ void deleteTree(Node** root_address, Node* root, int k)
 					}
 					Target_Right->N--;
 				}
-				// ???? ???? ??¡Æ?
+				// ì™¼ìª½ í˜•ì œ ë³¼ê²Œ
 				else if (goal_idx != 0 && root->C[goal_idx - 1]->N >= MIN_DEGREE)
 				{
-					// ??¢§?????
+					// ë¹Œë ¤ì˜¤ê¸°
 
 					Node* Target_Left = root->C[goal_idx - 1];
 					int num_Left = Target_Left->N;
 
-					// ?¢¬¡Æ? ????©©???
+					// íƒ€ê²Ÿ ë°€ì–´ë†“ê¸°
 					for (int i = Target->N; i > 0; i--)
 					{
 						Target->Key[i] = Target->Key[i - 1];
 					}
-					// ¡Æ? ©©?¢¬???
+					// ê°’ ë‚´ë¦¬ê¸°
 					Target->Key[0] = root->Key[goal_idx - 1];
 
-					// ?¡À???? ????©©???
+					// í¬ì¸í„° ë°€ì–´ë†“ê¸°
 					for (int i = Target->N + 1; i > 0; i--)
 					{
 						Target->C[i] = Target->C[i - 1];
@@ -334,10 +334,10 @@ void deleteTree(Node** root_address, Node* root, int k)
 
 				}
 
-				// ©©? ????¡Æ? ¢¥? ????
+				// ë‚´ í˜•ì œê°€ ë‹¤ ì‘ì•„
 				else
 				{
-					//©©?¡Æ? ©©??? ?¡© ?????¡©, ©©?¢¥? ??????¡Æ?¢¬¢¬ ?????©¬??
+					//ë‚´ê°€ ëì— ì„œ ìˆì–´ì„œ, ë‚˜ëŠ” ì™¼ìª½í•˜ê³ ë§Œ í•©ì³ì•¼ë¼
 					if (goal_idx == root->N)
 					{
 						// merge_left
@@ -347,7 +347,7 @@ void deleteTree(Node** root_address, Node* root, int k)
 						// Target = Left
 						Target_Left->Key[num_Left] = root->Key[goal_idx - 1];
 
-						// ?????? ??¢¬??? ?¨©?¢¬???? ??????¡Æ??©¬
+						// ì™¼ìª½ì— ì˜¤ë¥¸ìª½ ì¹œêµ¬ë“¤ì„ ë¶™ì—¬ì¤„ê±°ì•¼
 						for (int i = 0; i < Target->N; i++)
 						{
 							Target_Left->Key[(num_Left + 1) + i] = Target->Key[i];
@@ -358,7 +358,7 @@ void deleteTree(Node** root_address, Node* root, int k)
 						}
 						Target_Left->N = MAX_DEGREE;
 						root->N--;
-						// root ¡Æ? ??¢¥?¢¬?? 
+						// root ê°€ ë¹ˆë‹¤ë©´? 
 						if (root->N == 0)
 						{
 							*root_address = Target_Left;
@@ -371,9 +371,9 @@ void deleteTree(Node** root_address, Node* root, int k)
 					else
 					{
 						// merge_right
-						// ??¢¬??? ?????? ????
+						// ì˜¤ë¥¸ìª½ í˜•ì œë¼ í•©ì³
 						Node* Target_Right = root->C[right_idx];
-						// ??¢¬©¢ ¡Æ? ?¢´?? ©©???
+						// ë¶€ëª¨ ê°’ ì±„ì›Œ ë„£ê¸°
 
 
 						//mergeNode(Target, Right);
@@ -381,7 +381,7 @@ void deleteTree(Node** root_address, Node* root, int k)
 
 						for (int i = 0; i < Target_Right->N; i++)
 						{
-							// ??????¢©??? ??¢¬??? ??¢©? ?¡Æ ©©???
+							// ì™¼ìª½ìì‹ì— ì˜¤ë¥¸ìª½ ìì‹ í‚¤ ë„£ê¸°
 							Target->Key[(num_Target + 1) + i] = Target_Right->Key[i];
 
 						}
@@ -389,7 +389,7 @@ void deleteTree(Node** root_address, Node* root, int k)
 						{
 							for (int i = 0; i <= Target_Right->N; i++)
 							{
-								// ???? ??¢©??? Child?? ??¢¬??? ??¢©??? Child ©©???
+								// ì™¼ìª½ ìì‹ì˜ Childì— ì˜¤ë¥¸ìª½ ìì‹ì˜ Child ë„£ê¸°
 								Target->C[(num_Target + 1) + i] = Target_Right->C[i];
 
 							}
@@ -407,8 +407,8 @@ void deleteTree(Node** root_address, Node* root, int k)
 							*root_address = Target;
 						}
 
-						// ??¢§? ¡Æ?¢¥??? ???¢©.
-						// ??????¢¥??? ?¡À?¢¨??¡Æ? ??¢¥???, ??????¢¥??? ????¢¬? ?????¡© free¢¬? ¢©?????¡Æ?.
+						// ì˜¤ë¥˜ ê°€ëŠ¥ì„± ìˆìŒ.
+						// ë™ì í• ë‹¹ì„ ì§ì ‘í•œê²Œ ì•„ë‹ˆë¼, ë™ì í• ë‹¹ëœ ì£¼ì†Œë¥¼ ë°›ì•„ì„œ freeë¥¼ ì‹œì¼œì¤€ê²ƒ.
 						free(Target_Right);
 
 
@@ -422,7 +422,7 @@ void deleteTree(Node** root_address, Node* root, int k)
 			deleteTree(&Target, Target, k);
 
 
-			// ???? ?¢¬¡Æ? (LEFT ???©¢?? ???¡× ??¡Æ? ¡Æ??? ?? block ?????¡©)
+			// ì™¼ìª½ ë³´ê³  (LEFT ì„ ì–¸ì€ ì´ë•Œ ì¡°ê±´ ê²€ì‚¬ í›„ block ì•ˆì—ì„œ)
 
 		}
 	}
@@ -431,11 +431,11 @@ void deleteTree(Node** root_address, Node* root, int k)
 		//printf("The key is not in the Tree");
 	}
 }
-// ©©??? ??¢©? ??¢§?????(?)
+// ë…¸ë“œ ìì‹ ì¶œë ¥í•˜ê¸°(?)
 //void printAll(Node* root, int depth)
 //{
 //	
-//	// depth¢¬¢¬?¡© ?¢¬??
+//	// depthë§Œí¼ êµ¬ë¬¸
 //	for (int i = 0; i < depth; i++)
 //	{
 //		printf("\t");
