@@ -13,7 +13,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
-
+ 
 #include "memlib.h"
 #include "mm.h"
 /*********************************************************
@@ -44,16 +44,16 @@ team_t team = {
 #define PUT(p, val) (*(uintptr_t *)(p) = (val))
 
 /* Read the size and allocated fields from address p */
-#define GET_SIZE(p) (GET(p) & ~(DSIZE - 1))
+#define GET_SIZE(p)  (GET(p) & ~(DSIZE - 1))
 #define GET_ALLOC(p) (GET(p) & 0x1)
 
 /* Given block ptr bp, compute address of its header and footer */
-#define HDRP(bp) ((void *)(bp)-WSIZE)
+#define HDRP(bp) ((void *)(bp) - WSIZE)
 #define FTRP(bp) ((void *)(bp) + GET_SIZE(HDRP(bp)) - DSIZE)
 
 /* Given block ptr bp, compute address of next and previous blocks */
 #define NEXT_BLK(bp) ((void *)(bp) + GET_SIZE(HDRP(bp)))
-#define PREV_BLK(bp) ((void *)(bp)-GET_SIZE((void *)(bp)-DSIZE))
+#define PREV_BLK(bp) ((void *)(bp) - GET_SIZE((void *)(bp)-DSIZE))
 
 /* Given ptr in free list, get next and previous ptr in the list */
 /* bp is address of the free block. Since minimum Block size is 16 bytes, 
@@ -105,17 +105,12 @@ int mm_init(void)
 	//왜 heap_listp를 안 옮겨주지??
 
 	free_list_start = heap_listp + 2 * WSIZE;
-	printf("free_list_start: %p\n", free_list_start);
-	printf("PREV, NEXT: %p, %p\n", (char *)GET_PREV_PTR(free_list_start), (char *)GET_NEXT_PTR(free_list_start));
 
 	/* Extend the empty heap with a free block of minimum possible block size */
 	if (extend_heap(4) == NULL)
 	{
 		return -1;
 	}
-	printf("after extend_heap\n");
-	printf("free_list_start: %p\n", free_list_start);
-	printf("PREV, NEXT: %p, %p\n", (char *)GET_PREV_PTR(free_list_start), (char *)GET_NEXT_PTR(free_list_start));
 	return 0;
 }
 
@@ -146,18 +141,10 @@ void *mm_malloc(size_t size)
 	else
 		asize = DSIZE * ((size + DSIZE + (DSIZE - 1)) / DSIZE);
 
-	printf(">>>>malloc request: %d\n", asize);
-
 	/* Search the free list for a fit. */
 	if ((bp = find_fit(asize)) != NULL)
 	{
 		place(bp, asize);
-		printf(">>>> after find_fit\n");
-
-		printf("bp: %p\n", bp);
-		printf("%p, %p\n", GET_NEXT_PTR(bp), GET_PREV_PTR(bp));
-		
-	exit(1);
 		return (bp);
 	}
 
@@ -166,14 +153,7 @@ void *mm_malloc(size_t size)
 	if ((bp = extend_heap(extendsize / WSIZE)) == NULL)
 		return (NULL);
 	place(bp, asize);
-	printf(">>>> After extend_heap\n");
-	printf("bp: %p\n", bp);
-	printf("%p, %p\n", GET_NEXT_PTR(bp), GET_PREV_PTR(bp));
-	
-	exit(1);
 	return (bp);
-
-	
 }
 
 /* 
@@ -269,12 +249,12 @@ void *mm_realloc(void *bp, size_t size)
  *   Removes and inserts appropiate free block pointers to the explicit free list
  *   Returns the address of the coalesced block.
  */
-static void *coalesce(void *bp)
+static void *coalesce(void *bp) 
 {
 
 	//if previous block is allocated or its size is zero then PREV_ALLOC will be set.
 	size_t NEXT_ALLOC = GET_ALLOC(HDRP(NEXT_BLK(bp)));
-	size_t PREV_ALLOC = GET_ALLOC(FTRP(PREV_BLK(bp))) || PREV_BLK(bp) == bp;
+	size_t PREV_ALLOC = GET_ALLOC(FTRP(PREV_BLK(bp))) || PREV_BLK(bp) == bp;  
 	//PREV_BLK(bp) == bp: epilogue block을 만났을 떄. Extend했을 때 epilogue를 만나는 유일한 경우
 	size_t size = GET_SIZE(HDRP(bp));
 
@@ -371,6 +351,7 @@ static void *find_fit(size_t asize)
 	else
 		repeat_counter = 0;
 
+
 	for (bp = free_list_start; GET_ALLOC(HDRP(bp)) == 0; bp = GET_NEXT_PTR(bp))
 	{
 		if (asize <= (size_t)GET_SIZE(HDRP(bp)))
@@ -426,20 +407,12 @@ static void insert_in_free_list(void *bp)
 static void remove_from_free_list(void *bp)
 {
 
-	
-	printf("****remove_from_free_list***\n");
-	printf(">>>before\n");
-	SET_PREV_PTR(GET_NEXT_PTR(bp), GET_PREV_PTR(bp));
-
 	//내 앞에 누구 있으면
 	if (GET_PREV_PTR(bp))
 		SET_NEXT_PTR(GET_PREV_PTR(bp), GET_NEXT_PTR(bp)); //내 앞 노드의 주소에다가, 내 뒤 노드의 주소를 넣어준다.
 	else												  // 내 앞에 아무도 없으면 == 내가 젤 앞 노드이면
 		free_list_start = GET_NEXT_PTR(bp);				  //나를 없애면서, 내 뒷 노드에다가 가장 앞자리의 왕관을 물려주고 간다!
-
-	printf("%p, %p\n", GET_NEXT_PTR(bp), GET_PREV_PTR(bp));
 	SET_PREV_PTR(GET_NEXT_PTR(bp), GET_PREV_PTR(bp));
-
 }
 
 /* 
