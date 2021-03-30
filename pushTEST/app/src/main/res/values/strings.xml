@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">pushTEST</string>
+    <string name="firebase_notification_channel_id">testRoom</string>
+</resources>
