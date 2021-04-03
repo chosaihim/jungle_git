@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="Gradle: androidx.core:core-ktx:1.3.0@aar">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/dbc12052c2f3345202c15aab61d06029/jetified-core-ktx-1.3.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/10c30575eb4c3eaa9ea75fd3c0ce83a0/jetified-core-ktx-1.3.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/437e12f8716d97f6b8800f14fec69724/jetified-core-ktx-1.3.0/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/437e12f8716d97f6b8800f14fec69724/jetified-core-ktx-1.3.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/437e12f8716d97f6b8800f14fec69724/jetified-core-ktx-1.3.0/AndroidManifest.xml" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.core/core-ktx/1.3.0/98b0507bcf3cd12d671bf6dac09262757b60351d/core-ktx-1.3.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
