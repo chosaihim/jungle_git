@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.pic_pho">
+    <!-- for wifi direct -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="com.google.android.apps.photos.permission.GOOGLE_PHOTOS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
+<!--    <uses-permission android:name="android.permission.MANAGE_DOCUMENTS"/>-->
+
+    <uses-feature android:name="android.hardware.camera" />
+
+    <application
+        android:name=".App"
+        android:allowBackup="true"
+        android:icon="@drawable/picphomainlogo"
+        android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
+        android:roundIcon="@drawable/picphomainlogo"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+
+<!--        <meta-data android:name="com.google.firebase.messaging.default_notification_icon" android:resource="@drawable/picphomainlogo50px" />-->
+<!--        <meta-data android:name="com.google.firebase.messaging.default_notification_color" android:resource="@color/colorAccent" />-->
+
+
+
+        <activity android:name=".PhotoAlbum.PhotoAlbumViewPagerActivity"></activity>
+        <activity android:name=".WaitingRoomServer.ServerWaitingRoomActivity" />
+        <activity
+            android:name=".SplashActivity"
+            android:screenOrientation="portrait">
+             <intent-filter>
+             <action android:name="android.intent.action.MAIN" />
+             <category android:name="android.intent.category.LAUNCHER" />
+             </intent-filter>
+        </activity>
+        <activity
+            android:name=".SelectP2pOrServerActivity"
+            android:screenOrientation="portrait">
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+        </activity>
+        <activity
+            android:name=".MakeGroup.MakeGroupActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".PhotoRoomServer.ServerPhotoRoomActivity"
+            android:configChanges="screenSize|orientation"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Lobby.LobbyActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".PhotoRoom.PhotoRoomActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".LoginActivity"
+            android:configChanges="screenSize|orientation"
+            android:screenOrientation="portrait" />
+        <activity android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Redirect URI: "kakao{NATIVE_APP_KEY}://oauth“ -->
+                <data
+                    android:host="oauth"
+                    android:scheme="kakaoece39b60a7c22e79f10be8045187312b" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".WifiDirect.WifiDirectMainActivity"
+            android:screenOrientation="portrait">
+
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
+        </activity>
+        <activity
+            android:name=".WifiDirect.WaitingForOwnerActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".PhotoRoomServer.ServerPhotoEnlargeActivity"
+            android:screenOrientation="portrait" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.pic_pho.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+
+            <grant-uri-permission
+                android:path="string"
+                android:pathPattern="string"
+                android:pathPrefix="string" />
+        </provider>
+
+        <service
+            android:name=".WifiDirect.SendStreamIntentService"
+            android:exported="false" />
+        <service
+            android:name=".UnCatchTaskService"
+            android:stopWithTask="false" />
+
+
+        <service android:name=".MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+            <meta-data
+                android:name="com.google.firebase.messaging.default_notification_icon"
+                android:resource="@drawable/ic_baseline_search_24" />
+            <meta-data
+                android:name="com.google.firebase.messaging.default_notification_color"
+                android:resource="@color/colorAccent" />
+        </service>
+
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+    </application>
+
+</manifest>

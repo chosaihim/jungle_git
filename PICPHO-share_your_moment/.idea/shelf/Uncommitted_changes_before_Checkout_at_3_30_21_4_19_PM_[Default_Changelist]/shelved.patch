@@ -1,0 +1,108 @@
+Index: app/src/main/java/com/example/pic_pho/SplashActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.pic_pho\n\nimport android.content.Intent\nimport androidx.appcompat.app.AppCompatActivity\nimport android.os.Bundle\nimport kotlinx.coroutines.CoroutineScope\nimport kotlinx.coroutines.Dispatchers\nimport kotlinx.coroutines.delay\nimport kotlinx.coroutines.launch\n\nclass SplashActivity : AppCompatActivity() {\n    override fun onCreate(savedInstanceState: Bundle?) {\n        val time: Long = 1000\n\n        super.onCreate(savedInstanceState)\n        setContentView(R.layout.activity_splash)\n\n        this.supportActionBar?. hide()\n        CoroutineScope(Dispatchers.IO).launch{\n            delay(time)\n            val intent = Intent(applicationContext, LoginActivity::class.java)\n            startActivity(intent)\n            finish()\n        }\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/pic_pho/SplashActivity.kt	(revision b0f921a603071d382734d6ca525ddbb651efd76c)
++++ app/src/main/java/com/example/pic_pho/SplashActivity.kt	(date 1617084034000)
+@@ -3,6 +3,7 @@
+ import android.content.Intent
+ import androidx.appcompat.app.AppCompatActivity
+ import android.os.Bundle
++import com.example.pic_pho.CellularSocket.SocketActionIntentService
+ import kotlinx.coroutines.CoroutineScope
+ import kotlinx.coroutines.Dispatchers
+ import kotlinx.coroutines.delay
+@@ -11,10 +12,12 @@
+ class SplashActivity : AppCompatActivity() {
+     override fun onCreate(savedInstanceState: Bundle?) {
+         val time: Long = 1000
+-
+         super.onCreate(savedInstanceState)
+         setContentView(R.layout.activity_splash)
+ 
++        val Serviceintent = Intent(this, SocketActionIntentService::class.java)
++        startService(Serviceintent)
++
+         this.supportActionBar?. hide()
+         CoroutineScope(Dispatchers.IO).launch{
+             delay(time)
+Index: app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:tools=\"http://schemas.android.com/tools\"\n    package=\"com.example.pic_pho\">\n    <!-- for wifi direct -->\n    <uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\" />\n    <uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\" />\n    <uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\" />\n    <uses-permission android:name=\"android.permission.CHANGE_WIFI_STATE\" />\n    <uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\" />\n    <uses-permission android:name=\"android.permission.CHANGE_NETWORK_STATE\" />\n    <uses-permission android:name=\"android.permission.INTERNET\" /> <!-- for Album action -->\n    <uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />\n    <uses-permission android:name=\"android.permission.READ_EXTERNAL_STORAGE\" />\n    <uses-permission android:name=\"android.permission.CAMERA\" />\n\n    <uses-feature android:name=\"android.hardware.camera\" />\n\n    <uses-permission android:name=\"android.permission.WAKE_LOCK\" />\n\n    <application\n        android:name=\".App\"\n        android:allowBackup=\"true\"\n        android:icon=\"@mipmap/ic_launcher\"\n        android:label=\"@string/app_name\"\n        android:roundIcon=\"@mipmap/ic_launcher_round\"\n        android:supportsRtl=\"true\"\n        android:theme=\"@style/AppTheme\"\n        android:usesCleartextTraffic=\"true\">\n\n        <activity android:name=\".SelectP2pOrServerActivity\"></activity>\n        <activity android:name=\".MakeGroup.MakeGroupActivity\" />\n        <activity android:name=\".UI.FindP2PRippleBackgroundActivity\" />\n        <activity\n            android:name=\".PhotoRoom.ServerPhotoRoomActivity\"\n            android:configChanges=\"screenSize|orientation\" />\n        <activity android:name=\".Lobby.LobbyActivity\" />\n        <activity android:name=\".LoginActivity\">\n\n            <intent-filter>\n                <action android:name=\"android.intent.action.VIEW\" />\n\n                <category android:name=\"android.intent.category.DEFAULT\" />\n                <category android:name=\"android.intent.category.BROWSABLE\" />\n\n                <!-- Redirect URI: \"kakao{NATIVE_APP_KEY}://oauth“ -->\n                <data\n                    android:host=\"oauth\"\n                    android:scheme=\"kakaoece39b60a7c22e79f10be8045187312b\" />\n            </intent-filter>\n\n        </activity>\n\n\n        <activity android:name=\".WifiDirect.WifiDirectMainActivity\" />\n        <activity android:name=\".WifiDirect.WaitingForOwnerActivity\" />\n        <activity\n            android:name=\".SplashActivity\"\n            android:screenOrientation=\"portrait\">\n            <intent-filter>\n                <action android:name=\"android.intent.action.MAIN\" />\n                <category android:name=\"android.intent.category.LAUNCHER\" />\n            </intent-filter>\n        </activity>\n\n\n        <provider\n            android:name=\"androidx.core.content.FileProvider\"\n            android:authorities=\"com.example.pic_pho.fileprovider\"\n            android:exported=\"false\"\n            android:grantUriPermissions=\"true\">\n            <meta-data\n                android:name=\"android.support.FILE_PROVIDER_PATHS\"\n                android:resource=\"@xml/file_paths\" />\n        </provider>\n\n        <service\n            android:name=\".WifiDirect.SendStreamIntentService\"\n            android:exported=\"false\"></service>\n\n    </application>\n\n</manifest>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/AndroidManifest.xml	(revision b0f921a603071d382734d6ca525ddbb651efd76c)
++++ app/src/main/AndroidManifest.xml	(date 1617083638000)
+@@ -2,6 +2,7 @@
+ <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:tools="http://schemas.android.com/tools"
+     package="com.example.pic_pho">
++
+     <!-- for wifi direct -->
+     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+@@ -27,8 +28,15 @@
+         android:supportsRtl="true"
+         android:theme="@style/AppTheme"
+         android:usesCleartextTraffic="true">
++        <service
++            android:name=".CellularSocket.SocketActionIntentService"
++            android:exported="false"></service>
++        <service
++            android:name=".CellularSocket.SocketActionService"
++            android:enabled="true"
++            android:exported="true" />
+ 
+-        <activity android:name=".SelectP2pOrServerActivity"></activity>
++        <activity android:name=".SelectP2pOrServerActivity" />
+         <activity android:name=".MakeGroup.MakeGroupActivity" />
+         <activity android:name=".UI.FindP2PRippleBackgroundActivity" />
+         <activity
+@@ -36,7 +44,6 @@
+             android:configChanges="screenSize|orientation" />
+         <activity android:name=".Lobby.LobbyActivity" />
+         <activity android:name=".LoginActivity">
+-
+             <intent-filter>
+                 <action android:name="android.intent.action.VIEW" />
+ 
+@@ -48,10 +55,7 @@
+                     android:host="oauth"
+                     android:scheme="kakaoece39b60a7c22e79f10be8045187312b" />
+             </intent-filter>
+-
+         </activity>
+-
+-
+         <activity android:name=".WifiDirect.WifiDirectMainActivity" />
+         <activity android:name=".WifiDirect.WaitingForOwnerActivity" />
+         <activity
+@@ -59,11 +63,11 @@
+             android:screenOrientation="portrait">
+             <intent-filter>
+                 <action android:name="android.intent.action.MAIN" />
++
+                 <category android:name="android.intent.category.LAUNCHER" />
+             </intent-filter>
+         </activity>
+ 
+-
+         <provider
+             android:name="androidx.core.content.FileProvider"
+             android:authorities="com.example.pic_pho.fileprovider"
+@@ -76,8 +80,7 @@
+ 
+         <service
+             android:name=".WifiDirect.SendStreamIntentService"
+-            android:exported="false"></service>
+-
++            android:exported="false" />
+     </application>
+ 
+ </manifest>
+\ No newline at end of file

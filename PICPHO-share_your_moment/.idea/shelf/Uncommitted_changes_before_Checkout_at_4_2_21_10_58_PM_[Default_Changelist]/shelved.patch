@@ -1,0 +1,90 @@
+Index: app/src/main/java/com/example/pic_pho/MakeGroup/MakeGroupActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.pic_pho.MakeGroup\n\nimport android.content.Intent\nimport android.os.Bundle\nimport android.util.Log\nimport android.view.View\nimport android.widget.Toast\nimport androidx.appcompat.app.AppCompatActivity\nimport androidx.recyclerview.widget.LinearLayoutManager\nimport androidx.recyclerview.widget.RecyclerView\nimport com.example.pic_pho.App\nimport com.example.pic_pho.CellularSocket.SocketUtill\nimport com.example.pic_pho.MakeGroup.selectedFriends.SelectedFriendsModel\nimport com.example.pic_pho.MakeGroup.selectedFriends.SelectedFriendsRecyclerAdapter\nimport com.example.pic_pho.MakeGroup.selectedFriends.SelectedFriendsRecyclerViewInterface\nimport com.example.pic_pho.PhotoRoomServer.ServerPhotoRoomActivity\nimport com.example.pic_pho.WaitingRoomServer.ServerWaitingRoomActivity\nimport com.example.pic_pho.WifiDirect.UI.HorizontalItemDecoration\nimport com.example.pic_pho.databinding.ActivityMakeGroupBinding\nimport com.github.nkzawa.socketio.client.Socket\nimport com.google.firebase.iid.FirebaseInstanceId\nimport com.google.gson.JsonArray\nimport com.google.gson.JsonObject\nimport com.kakao.sdk.talk.TalkApiClient\nimport com.kakao.sdk.user.UserApiClient\nimport kotlinx.android.synthetic.main.activity_lobby.*\nimport kotlinx.android.synthetic.main.activity_login.*\nimport kotlinx.android.synthetic.main.activity_make_group.*\nimport kotlinx.android.synthetic.main.activity_photoroom.*\nimport kotlinx.android.synthetic.main.item_make_group_recycler.*\nimport kotlinx.android.synthetic.main.item_selected_friends.*\nimport java.net.URISyntaxException\nimport kotlinx.android.synthetic.main.item_make_group_recycler.*\nimport kotlinx.coroutines.runBlocking\nimport kotlin.concurrent.thread\n\n\nclass MakeGroupActivity : AppCompatActivity(),\n    MakeGroupRecyclerViewInterface, SelectedFriendsRecyclerViewInterface {\n\n    val TAG: String = \"로그\"\n    lateinit var binding: ActivityMakeGroupBinding\n\n    var makeGroupModelList = ArrayList<MakeGroupModel>()\n\n    private lateinit var makeGroupRecyclerAdapter: MakeGroupRecyclerAdapter\n    var mSocket: Socket? = null\n\n    companion object {\n        lateinit var jsonobjectlist: JsonArray\n\n        var selectedFriends: RecyclerView? = null\n\n        var selectedFriendsModelList = ArrayList<SelectedFriendsModel>()\n        lateinit var selectedFriendsRecyclerAdapter: SelectedFriendsRecyclerAdapter\n\n        //수정(jsonObject없이 수정)\n        var selectedFriendsList = ArrayList<MakeGroupModel>()\n    }\n\n    override fun onCreate(savedInstanceState: Bundle?) {\n        super.onCreate(savedInstanceState)\n\n        binding = ActivityMakeGroupBinding.inflate(layoutInflater)\n        setContentView(binding.root)\n        selectedFriends = binding.selectedFriends\n\n        TalkApiClient.instance.friends { friends, error ->\n            if (error != null) {\n                Log.e(TAG, \"카카오톡 친구 목록 가져오기 실패\", error)\n            } else if (friends != null) {\n                Log.i(TAG, \"카카오톡 친구 목록 가져오기 성공 \\n${friends.elements.joinToString(\"\\n\")}\")\n                // 친구의 UUID 로 메시지 보내기 가능\n\n\n                for (i in 0 until friends.elements.size) {\n                    var groupModel = MakeGroupModel(\n                        name = friends.elements[i].profileNickname,\n                        profileImage = friends.elements[i].profileThumbnailImage.toString(),\n                        userId = friends.elements[i].id.toInt()\n                    )\n                    makeGroupModelList.add(groupModel)\n\n                }\n\n                //어댑터 인스턴스 생성\n                makeGroupRecyclerAdapter = MakeGroupRecyclerAdapter(this)\n                makeGroupRecyclerAdapter.submitList(makeGroupModelList)\n\n                binding.friendList.apply {\n                    layoutManager =\n                        LinearLayoutManager(\n                            this@MakeGroupActivity,\n                            LinearLayoutManager.VERTICAL,\n                            false\n                        )\n                    adapter = makeGroupRecyclerAdapter\n                }\n\n\n                //selectedFriends 어댑터 인스턴스 생성\n                selectedFriendsRecyclerAdapter = SelectedFriendsRecyclerAdapter(this)\n                selectedFriendsRecyclerAdapter.submitList(selectedFriendsModelList)\n                update_selectedFriends_recyclerview()\n\n\n//                selected_friends.apply{\n//                    layoutManager =\n//                        LinearLayoutManager(\n//                            this@MakeGroupActivity,\n//                            LinearLayoutManager.HORIZONTAL,\n//                            false\n//                        )\n//                    adapter = selectedFriendsRecyclerAdapter\n//                }\n            }\n        }\n\n//\n//        binding.searchviewMakegroup.setOnQueryTextListener(object : SearchView.OnQueryTextListener {\n//            override fun onQueryTextSubmit(p0: String?): Boolean {\n//                return true\n//            }\n//\n//            override fun onQueryTextChange(p0: String?): Boolean {\n//                binding.textTestSearchView.text = p0\n//                return true\n//            }\n//\n//        })\n\n    }\n\n    fun update_selectedFriends_recyclerview() {\n\n        binding.selectedFriends.apply {\n\n            layoutManager =\n                LinearLayoutManager(\n                    this@MakeGroupActivity,\n                    LinearLayoutManager.HORIZONTAL,\n                    false\n                )\n            adapter = selectedFriendsRecyclerAdapter\n            addItemDecoration(HorizontalItemDecoration(20))\n        }\n    }\n\n    fun sendAlarm(view: View) {\n        try {\n\n            mSocket = SocketUtill.createAndConnetSocket()\n            mSocket!!.emit(\"push_send\", 1)\n\n            val token = FirebaseInstanceId.getInstance().token\n            Log.e(TAG, \"token: ${token}\")\n\n        } catch (e: URISyntaxException) {\n            Log.d(TAG, \"failed\")\n        }\n    }\n\n    fun activityfinish(view: View) {\n        finish()\n    }\n\n\n    //function for finish action\n    fun makeGroupAction(view: View) {\n\n        Toast.makeText(\n            App.instance,\n            \"그룹만들기!!\",//\"클릭됨!! ${this.modelList[position].name}\",\n            Toast.LENGTH_SHORT\n        ).show()\n\n        //TODO 본인 정보도 포함 시켜서 보내야함\n        mSocket = SocketUtill.createAndConnetSocket()\n        if (mSocket != null) {\n            var selecetedModelList = ArrayList<MakeGroupModel>()\n            jsonobjectlist = JsonArray()\n            for (i in 0 until makeGroupModelList.size) {\n                if (makeGroupModelList[i].isSelected == true) {\n                    var jsonobject: JsonObject? = JsonObject()\n                    jsonobject!!.addProperty(\"userid\", makeGroupModelList[i].userId.toString())\n                    jsonobject!!.addProperty(\"name\", makeGroupModelList[i].name.toString())\n                    jsonobject!!.addProperty(\n                        \"profileImage\",\n                        makeGroupModelList[i].profileImage.toString()\n                    )\n                    jsonobjectlist.add(jsonobject)\n\n                    selectedFriendsList.add(makeGroupModelList[i])\n                }\n            }\n\n\n            UserApiClient.instance.me { user, error ->\n                if (error != null) {\n                    Log.e(TAG, \"사용자 정보 요청 실패\", error)\n                } else if (user != null) {\n                    Log.i(TAG, \"사용자 정보 요청 성공\")\n                    Log.d(\"jsonobject\", \"makeGroupAction: ${jsonobjectlist}\")\n                    mSocket!!.emit(\"selectedGroup\", jsonobjectlist, \"picpho\" + user.id.toString())\n\n                    val intent: Intent = Intent(this, ServerWaitingRoomActivity::class.java)\n                    intent.putExtra(\"roomAddress\", \"picpho\" + user.id.toString())\n                    intent.putExtra(\"jsonobjectlist\", jsonobjectlist.toString())\n                    Log.e(\"로그\", intent.getStringExtra(\"roomAddress\"))\n//                    Toast.makeText(this, \"${intent.getStringExtra(\"roomAddress\")}\", Toast.LENGTH_SHORT).show()\n                    startActivity(intent)\n                }\n\n            }\n\n\n        } else {\n            Log.d(TAG, \"makeGroupAction: socket null\")\n        }\n\n\n    }\n\n    override fun onItemClicked() {\n    }\n\n    override fun onDestroy() {\n        super.onDestroy()\n        if (mSocket != null) {\n            mSocket!!.close()\n        }\n        selectedFriendsModelList.clear()\n        selectedFriendsList.clear()\n    }\n}\n\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/pic_pho/MakeGroup/MakeGroupActivity.kt	(revision 986edd332a0d49bc24417ba3b2a4016d567fc874)
++++ app/src/main/java/com/example/pic_pho/MakeGroup/MakeGroupActivity.kt	(date 1617371929000)
+@@ -146,19 +146,6 @@
+         }
+     }
+ 
+-    fun sendAlarm(view: View) {
+-        try {
+-
+-            mSocket = SocketUtill.createAndConnetSocket()
+-            mSocket!!.emit("push_send", 1)
+-
+-            val token = FirebaseInstanceId.getInstance().token
+-            Log.e(TAG, "token: ${token}")
+-
+-        } catch (e: URISyntaxException) {
+-            Log.d(TAG, "failed")
+-        }
+-    }
+ 
+     fun activityfinish(view: View) {
+         finish()
+@@ -166,60 +153,7 @@
+ 
+ 
+     //function for finish action
+-    fun makeGroupAction(view: View) {
+-
+-        Toast.makeText(
+-            App.instance,
+-            "그룹만들기!!",//"클릭됨!! ${this.modelList[position].name}",
+-            Toast.LENGTH_SHORT
+-        ).show()
+-
+-        //TODO 본인 정보도 포함 시켜서 보내야함
+-        mSocket = SocketUtill.createAndConnetSocket()
+-        if (mSocket != null) {
+-            var selecetedModelList = ArrayList<MakeGroupModel>()
+-            jsonobjectlist = JsonArray()
+-            for (i in 0 until makeGroupModelList.size) {
+-                if (makeGroupModelList[i].isSelected == true) {
+-                    var jsonobject: JsonObject? = JsonObject()
+-                    jsonobject!!.addProperty("userid", makeGroupModelList[i].userId.toString())
+-                    jsonobject!!.addProperty("name", makeGroupModelList[i].name.toString())
+-                    jsonobject!!.addProperty(
+-                        "profileImage",
+-                        makeGroupModelList[i].profileImage.toString()
+-                    )
+-                    jsonobjectlist.add(jsonobject)
+-
+-                    selectedFriendsList.add(makeGroupModelList[i])
+-                }
+-            }
+-
+-
+-            UserApiClient.instance.me { user, error ->
+-                if (error != null) {
+-                    Log.e(TAG, "사용자 정보 요청 실패", error)
+-                } else if (user != null) {
+-                    Log.i(TAG, "사용자 정보 요청 성공")
+-                    Log.d("jsonobject", "makeGroupAction: ${jsonobjectlist}")
+-                    mSocket!!.emit("selectedGroup", jsonobjectlist, "picpho" + user.id.toString())
+-
+-                    val intent: Intent = Intent(this, ServerWaitingRoomActivity::class.java)
+-                    intent.putExtra("roomAddress", "picpho" + user.id.toString())
+-                    intent.putExtra("jsonobjectlist", jsonobjectlist.toString())
+-                    Log.e("로그", intent.getStringExtra("roomAddress"))
+-//                    Toast.makeText(this, "${intent.getStringExtra("roomAddress")}", Toast.LENGTH_SHORT).show()
+-                    startActivity(intent)
+-                }
+ 
+-            }
+-
+-
+-        } else {
+-            Log.d(TAG, "makeGroupAction: socket null")
+-        }
+-
+-
+-    }
+ 
+     override fun onItemClicked() {
+     }
