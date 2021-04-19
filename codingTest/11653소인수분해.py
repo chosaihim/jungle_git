@@ -2,14 +2,17 @@ import sys
 input = sys.stdin.readline
 
 N = int(input())
-devider = 2
+sq=round(N**(1/2))+1
+divider = 2
 
 while N > 1:
-    # print(N)
-    if N % devider == 0:
-        print(devider)
-        N = N // devider
+    if N % divider == 0:
+        print(divider)
+        N = N // divider
     else:
-        devider += 1
+        divider += 1
+        if divider > sq :
+            print(N)
+            break
 
     
