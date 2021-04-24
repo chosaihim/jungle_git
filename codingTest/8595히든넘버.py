@@ -3,7 +3,6 @@ import re
 input = sys.stdin.readline
 
 
-
 def total_in_numbers(input_str):
     numbers = re.findall("\d+",input_str)
     total = 0
