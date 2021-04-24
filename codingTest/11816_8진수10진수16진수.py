@@ -36,7 +36,6 @@ def octToDec(x):
     return int(x[1:],8)
 def hexToDec(x):
     return int(x[2:],16)
-
 def convert(x):
     if(x[0:2] == "0x"):
         return hexToDec(x)
