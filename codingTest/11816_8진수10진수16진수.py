@@ -6,8 +6,6 @@ x = input()
 def x_num(x):
     ret = 0
     
-    print("len:", len(x))
-    
     if x[0] != '0':
         return x      
     else:
@@ -15,20 +13,14 @@ def x_num(x):
             return x
         else:
             if x[1] == 'x':
-                # print(f'a = {ord("a")}')
-                # if(ord(x[2])>96):
-                    # print("this is alphabet")
-                # else:
-                    # print("this is digit")
-                # ret = int(x[2])
                 power = 1
                 for i in range(len(x)-1,1,-1):
-                    print(f'i:{i}, x[{i}]={x[i]} || {x.isalpha}')
-                    if(x[i].isalpha):
-                        print(f'{i} alphabet: {x[i]}')
+                    # print(f'i:{i}, x[{i}]={x[i]}')
+                    if(ord(x[i])>96):
+                        # print(f'{i} alphabet: {x[i]}')
                         ret += (ord(x[i])-87) * power
                     else:
-                        print(f'{i} digit: {x[i]}')
+                        # print(f'{i} digit: {x[i]}')
                         ret += int(x[i]) * power
                     power *= 16
                         
@@ -41,3 +33,6 @@ def x_num(x):
     return ret
 
 print(x_num(x))
+
+### 정답!!
+## t=input();c=[[0,1][t[0]=='0'],2][t[1]=='x'];print(int(t[c:],[10,8,16][c]))
