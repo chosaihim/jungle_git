@@ -12,4 +12,4 @@ union_list.sort()
 print(union_list)
 
 for element in union_list:
-    print(element ,end=' ')
+    print(element)# ,end=' ')
