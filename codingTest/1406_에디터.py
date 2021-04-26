@@ -1,45 +1,33 @@
 import sys
 input = sys.stdin.readline
+from collections import deque
 
-n = input()
+front_str = deque(list(input().strip()))
 m = int(input())
+back_str = deque()
 
-print(f'\nn:{n}, m:{m}')
+# print(front_str)
 
-str_len = len(n)-1
-print(str_len)
-cursor = str_len
-
-print("\n--------")
-print(f'n:{n}')
 for i in range(m):
     instruction = input()
-    print(f'instruction: {instruction}')
     if instruction[0] == 'L':
-        cursor -= 1
-        if cursor < 0: cursor = 0
-        print("cursor: ", cursor)
-    elif instruction[0] == 'D':
-        cursor += 1
-        if cursor == str_len: cursor = str_len-1
-        print("cursor: ", cursor)
-    elif instruction[0] == 'B':
-        if cursor != 0:
-            cursor -= 1
-            n.remove(cursor)
-            str_len -= 1
-        print("cursor: ", cursor)
-    elif instruction[0] == 'P':
-        print(instruction[2])
-        n = n[0:cursor] + instruction[2] + n[cursor:str_len]
-        str_len += 1
-        cursor += 1
-        print("cursor: ", cursor)
+        if front_str:
+            back_str.append(front_str.pop())
 
-    print(f'n:{n}')
-    print("\n--------")
-        
-print(n)
+    elif instruction[0] == 'D':
+        if back_str:
+            front_str.append(back_str.pop())
+
+    elif instruction[0] == 'B':
+        if front_str:
+            front_str.pop()
+
+    elif instruction[0] == 'P':
+        front_str.append(instruction[2])
+
+
+back_str = list(back_str)
+print("".join(front_str) + "".join(back_str[::-1]))
 
 # L	커서를 왼쪽으로 한 칸 옮김 (커서가 문장의 맨 앞이면 무시됨)
 # D	커서를 오른쪽으로 한 칸 옮김 (커서가 문장의 맨 뒤이면 무시됨)
