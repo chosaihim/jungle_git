@@ -4,7 +4,7 @@ import sys
 input = sys.stdin.readline
 from collections import deque
 
-#input from 
+#input from testcase
 input_str = list(input().strip())
 bomb = input().strip()
 
@@ -26,9 +26,6 @@ for next_char in input_str:
             for i in range(bomb_len):
                 answer.pop()
     
-
-# print("answer: ", answer)
-
 print("".join(answer)) if answer else print("FRULA")
 
 
