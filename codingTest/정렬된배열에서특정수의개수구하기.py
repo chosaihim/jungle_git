@@ -60,3 +60,16 @@ else:
 # 7 4
 # 1 1 2 2 2 2 3
 # -> -1
+
+import sys
+from bisect import bisect_left, bisect_right
+
+sys.stdin = open('input.txt')
+
+N,M  = map(int, sys.stdin.readline().split())
+array = list(map(int, sys.stdin.readline().split()))
+
+
+startindex=bisect_left(array,M)
+endindex=bisect_right(array,M)
+print(endindex-startindex)

@@ -20,13 +20,14 @@ def solution(expression):
         o = operators
         temp_n = []
         temp_o = []
+        
         for operator in priority: # 연산자 하나 선택
             left = n[0]
             for i in range(len(o)):
                 if o[i] != operator:
                     temp_n.append(left)
-                    left = n[i+1]
                     temp_o.append(o[i])
+                    left = n[i+1]
                     if i == len(o) - 1:
                         temp_n.append(left)
                 else:

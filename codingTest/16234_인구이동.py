@@ -1,3 +1,5 @@
+
+# 80%에서 시간초과
 import sys
 from collections import deque
 input = sys.stdin.readline
@@ -11,16 +13,16 @@ d_row = [0, 1, 0, -1]
 d_col = [1, 0, -1, 0]
 
 def bfs(population, x, y):
-    root = [x,y]
-    queue = deque([root])
+    # root = [x,y]
+    queue = deque([[x,y]])
     union = deque()
+    visited[x][y] = 1
     
     total = 0
     count = 0
     while queue:
         row, col = queue.popleft()
         union.append([row,col])
-        visited[row][col] = 1
         
         total += population[row][col]
         count += 1
@@ -36,9 +38,6 @@ def bfs(population, x, y):
     avg = total // count
     for u in union:
         population[u[0]][u[1]] = avg
-    
-    if count == 1: return False
-    else: return True
 
 
 day = 0
@@ -46,21 +45,17 @@ while True:
     immigrantFlag = False
     count = 0
     
-    for row in range(N):
-        for col in range(N):
-            visited[row][col] = 0
+    visited = [[0]*N for _ in range(N)]
+    # for row in range(N):
+    #     for col in range(N):
+    #         visited[row][col] = 0
             
     for row in range(N):
         for col in range(N):
             if not visited[row][col]:
                 bfs(population, row, col)
                 count += 1
-                # if bfs(population, row, col):
-                    # immigrantFlag = True
-                
-    # if immigrantFlag: day += 1
-    # else: break
-    # print(count)
+
     if count == N*N: break
     else: day += 1
 

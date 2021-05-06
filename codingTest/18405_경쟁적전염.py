@@ -1,4 +1,5 @@
 #168ms
+#ver 2 틀림
 import sys
 from collections import deque
 input = sys.stdin.readline
@@ -10,18 +11,13 @@ s, x, y = map(int, input().split())
 dr = [0, -1, 0, 1]
 dc = [-1, 0, 1, 0]
 
-def spread(examiner, k, s):
-    
-    # 초기 queue 세팅
-    virus = [[] for _ in range(k+1)]
+def spread(examiner, k, s, x, y):
+
+    queue = deque()
     for row in range(n):
         for col in range(n):
-            if examiner[row][col]: virus[examiner[row][col]].append([row,col])
+            if examiner[row][col]: queue.append([row,col])
     
-    queue = deque()
-    for i in range(1,k+1):
-        for j in range(len(virus[i])):
-            queue.append([virus[i][j][0],virus[i][j][1]])
     
     #BFS
     for time in range(s):        
@@ -35,7 +31,11 @@ def spread(examiner, k, s):
                     if examiner[r][c] == 0: 
                         examiner[r][c] = examiner[row][col]
                         temp_queue.append([r,c])
+                    elif examiner[row][col] < examiner[r][c] < 10000:
+                        examiner[r][c] = examiner[row][col]
+            examiner[row][col] += 10000
         
+        if examiner[x-1][y-1]: return examiner
         
         for temp in temp_queue:
             queue.append(temp)
@@ -43,7 +43,55 @@ def spread(examiner, k, s):
     return examiner
     
 
-print(spread(examiner, k, s)[x-1][y-1])
+print(spread(examiner, k, s, x, y)[x-1][y-1])
+
+#168ms
+#ver 1
+# import sys
+# from collections import deque
+# input = sys.stdin.readline
+
+# n, k = map(int, input().split())
+# examiner = [list(map(int, input().split())) for _ in range(n)]
+# s, x, y = map(int, input().split())
+
+# dr = [0, -1, 0, 1]
+# dc = [-1, 0, 1, 0]
+
+# def spread(examiner, k, s):
+    
+#     # 초기 queue 세팅
+#     virus = [[] for _ in range(k+1)]
+#     for row in range(n):
+#         for col in range(n):
+#             if examiner[row][col]: virus[examiner[row][col]].append([row,col])
+    
+#     queue = deque()
+#     for i in range(1,k+1):
+#         for j in range(len(virus[i])):
+#             queue.append([virus[i][j][0],virus[i][j][1]])
+    
+#     #BFS
+#     for time in range(s):        
+#         temp_queue = deque()
+#         while queue:
+#             row, col = queue.popleft()
+            
+#             for i in range(4):
+#                 r = row + dr[i]; c = col + dc[i]
+#                 if 0 <= r < n and 0 <= c < n:
+#                     if examiner[r][c] == 0: 
+#                         examiner[r][c] = examiner[row][col]
+#                         temp_queue.append([r,c])
+        
+        
+#         for temp in temp_queue:
+#             queue.append(temp)
+    
+#     return examiner
+    
+
+# print(spread(examiner, k, s)[x-1][y-1])
 
 
 #72ms
