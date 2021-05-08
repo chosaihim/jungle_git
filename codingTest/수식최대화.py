@@ -13,15 +13,17 @@ def solution(expression):
     
     # 수식 숫자 구분하기
     numbers = list(map(int, re.findall("\d+", expression)))
-    operators = re.findall("['+','\-','*']", expression)    
+    operators = re.findall("['+','\-','*']", expression)
     
     for priority in priorities: # 순열 중에 하나 선택
         n = numbers
         o = operators
+        
         temp_n = []
         temp_o = []
         
         for operator in priority: # 연산자 하나 선택
+            if(len(n) == 0): break
             left = n[0]
             for i in range(len(o)):
                 if o[i] != operator:
@@ -52,6 +54,22 @@ def solution(expression):
 
 
 
-expression = "100-200*300-500+20"
+# expression = "100-200*300-500+20"
 # result = 60420
+expression = "1+1"
 print(solution(expression))
+
+
+# 짧은 풀이
+# def solution(expression):
+#     operations = [('+', '-', '*'),('+', '*', '-'),('-', '+', '*'),('-', '*', '+'),('*', '+', '-'),('*', '-', '+')]
+#     answer = []
+#     for op in operations:
+#         a = op[0]
+#         b = op[1]
+#         temp_list = []
+#         for e in expression.split(a):
+#             temp = [f"({i})" for i in e.split(b)]
+#             temp_list.append(f'({b.join(temp)})')
+#         answer.append(abs(eval(a.join(temp_list))))
+#     return max(answer)
