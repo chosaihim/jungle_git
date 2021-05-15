@@ -1,13 +1,13 @@
 #
-# import re
+import re
 
-# st = input()
+st = input()
 
-# alphabets = re.findall('c=|c-|dz=|d-|lj|nj|s=|z=',st)
-# st = re.sub('c=|c-|dz=|d-|lj|nj|s=|z=','!',st)
-# alphabets += re.findall('[a-z]',st)
+alphabets = re.findall('c=|c-|dz=|d-|lj|nj|s=|z=',st)
+st = re.sub('c=|c-|dz=|d-|lj|nj|s=|z=','!',st)
+alphabets += re.findall('[a-z]',st)
 
-# print(len(alphabets))
+print(len(alphabets))
 
 # 52ms
 # 이해하기
