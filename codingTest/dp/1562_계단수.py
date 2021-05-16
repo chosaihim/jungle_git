@@ -21,4 +21,3 @@ else:
     print(dp)
     # print(sum_dp)
     print(sum(sum_dp))
-
