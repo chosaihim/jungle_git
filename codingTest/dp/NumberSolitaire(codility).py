@@ -7,7 +7,7 @@ def solution(A):
         for sub in range(2,7):
             if i-sub < 0:
                 break
-            dp[i] = max(dp[i],dp[i-prev]+A[i])
+            dp[i] = max(dp[i],dp[i-sub]+A[i])
     
     return dp[-1]
 
@@ -30,7 +30,7 @@ def solution(A):
 
     return answer[-1]
 
-
+# mine copying
 def solution(A):
     
     dp = [A[0]]*(len(A) + 5)
