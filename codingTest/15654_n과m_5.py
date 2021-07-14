@@ -10,3 +10,4 @@ for permutation in list(permutations(l,m)):
     for p in permutation:
         print(p, end = ' ')
     print()
+
