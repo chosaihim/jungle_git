@@ -22,3 +22,13 @@
 # (1칸, 2칸)
 # (1칸, 1칸, 1칸)
 # 총 3가지 방법으로 멀리 뛸 수 있습니다.
+
+def solution(n):
+    dp = [0] * (n+2)
+    dp[0] = 1
+    dp[1] = 2
+    
+    for i in range(2,n):
+        dp[i] = dp[i-2] + dp[i-1]
+
+    return dp[n-1] % 1234567
