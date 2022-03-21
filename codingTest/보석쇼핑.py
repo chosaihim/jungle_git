@@ -36,7 +36,7 @@ def solution(gems):
     #             break
     
     return answer
-
+  
 
 
 # 다른 블로그에서 가져온 정답
