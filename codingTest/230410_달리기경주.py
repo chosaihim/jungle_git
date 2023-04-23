@@ -2,7 +2,7 @@
 # https://school.programmers.co.kr/learn/courses/30/lessons/178871
 
 
-# 시간초과
+# 시간초과.
 # def solution(players, callings):
 #     answer = players
     
