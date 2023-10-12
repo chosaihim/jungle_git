@@ -1,0 +1,38 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+h1 {
+  font-size: 3rem;
+}
+
+.btn {
+  margin-top: 0.5rem;
+  font-size: 1.3rem;
+}
+
+#d-day-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 1.6rem;
+}
+
+.d-day-child-container {
+  text-align: center;
+  margin-right: 1rem;
+}
+
+.d-day-child-container span {
+  font-size: 1.3rem;
+}
+
+.target-selector {
+  margin-top: 0.5rem;
+}

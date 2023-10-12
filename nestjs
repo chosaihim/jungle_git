@@ -1,0 +1,8 @@
+@UseGuards(CheckAuthForce)
+@Post()
+createAccount(
+    @Param('email') email: string,
+    @Param('phone') phone: string,
+) {
+    return this.userService.createAccount(email, phone)
+}

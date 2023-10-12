@@ -1,26 +1,37 @@
 <!DOCTYPE html>
 <html lang="ko">
-
-<head>
-    <title>Document</title>
-    <script>
-        const consoleTool = function () {
-            console.log('함수를 실행했어요');
-        }
-    </script>
-</head>
-
-<body>
-    안녕하세요..
-    <div>
-        안녕하세요. -
+  <head>
+    <title>D-Day</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script src="./script.js" defer></script>
+  </head>
+  <body>
+    <h1>D-Day</h1>
+    <div id="d-day-container">
+      <div class="d-day-child-container">
+        <span id="days">0</span>
+        <span>일</span>
+      </div>
+      <div class="d-day-child-container">
+        <span id="hours">0</span>
+        <span>시간</span>
+      </div>
+      <div class="d-day-child-container">
+        <span id="min">0</span>
+        <span>분</span>
+      </div>
+      <div class="d-day-child-container">
+        <span id="sec">0</span>
+        <span>초</span>
+      </div>
     </div>
-    <div>
-        반갑습니다. - 
+    <div id="d-day-message"></div>
+    <div id="target-selector id">
+      <input id="target-year-input" class="target-input" size="5" /> -
+      <input id="target-month-input" class="target-input" size="5" /> -
+      <input id="target-date-input" class="target-input" size="5" />
     </div>
-    <span>잘 부탁드립니다.</span>
-    <input />
-    <button onclick="consoleTool()">버튼</button>
-</body>
-
+    <button onclick="starter()" class="btn">카운트다운 시작</button>
+    <button onclick="resetTimer()" class="btn">타이머 초기화</button>
+  </body>
 </html>
